@@ -2,883 +2,1336 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Horocosmo</title>
-<title>An Initiative under Astro Arun Pandit</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unrest - Delhi University's Campus Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #f0f8ff;
-  --surface: #e6f3fb;
-  --card: #ffffff;
-  --border: rgba(56,152,210,0.18);
-  --border-hover: rgba(56,152,210,0.45);
-  --gold: #2a8fc9;
-  --gold-soft: rgba(56,152,210,0.1);
-  --gold-glow: rgba(56,152,210,0.2);
-  --text: #0d2d45;
-  --muted: #5a8aaa;
-  --dim: #94b8cc;
-  --sage: #2e9e6e;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-html, body {
-  height: 100%;
-  overflow: hidden;
-}
-
-body {
-  font-family: 'Outfit', sans-serif;
-  background: #cce8f7;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ── Phone shell ─────────────────────────────────────────────────── */
-.phone-shell {
-  width: min(390px, 100vw);
-  height: min(844px, 100vh);
-  position: relative;
-  overflow: hidden;
-  border-radius: min(44px, 0px);
-  box-shadow: 0 32px 80px rgba(0,60,120,0.18), 0 0 0 1px rgba(56,152,210,0.15);
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-}
-
-@media (max-width: 430px) {
-  body { display: block; }
-  .phone-shell {
-    width: 100vw;
-    height: 100dvh;
-    border-radius: 0;
-    box-shadow: none;
+  :root {
+    --ink: #0e0d0b;
+    --ink2: #3d3b35;
+    --ink3: #7a776e;
+    --paper: #f5f2eb;
+    --cream: #ede9df;
+    --accent: #c84b2f; /* Red / L color */
+    --accent2: #e8a020;
+    --green: #2a6b4a; /* Green / W color */
+    --blue: #1e4f8c;
+    --border: rgba(14,13,11,0.12);
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
   }
-}
 
-/* Ambient background */
-.phone-shell::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 40% at 50% 0%, rgba(56,152,210,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(30,120,200,0.06) 0%, transparent 60%);
-  pointer-events: none; z-index: 0;
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--paper); color: var(--ink); overflow-x: hidden; }
 
-/* Subtle cloud-like stars */
-.stars { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-.star {
-  position: absolute; border-radius: 50%; background: rgba(56,152,210,0.5);
-  animation: twinkle var(--d,3s) ease-in-out infinite;
-  animation-delay: var(--delay,0s);
-}
-@keyframes twinkle {
-  0%,100% { opacity: var(--lo,0.08); }
-  50%      { opacity: var(--hi,0.35); }
-}
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: 60px;
+    background: rgba(245,242,235,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .nav-logo { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+  .nav-logo span { color: var(--accent); font-style: italic; }
+  .nav-links { display: flex; align-items: center; gap: 2rem; }
+  .nav-links a { font-size: 0.85rem; font-weight: 500; color: var(--ink2); text-decoration: none; transition: color 0.2s; cursor: pointer; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta { background: var(--ink); color: var(--paper) !important; padding: 0.5rem 1.2rem; border-radius: 100px; font-size: 0.82rem !important; font-weight: 600 !important; transition: background 0.2s !important; }
+  .nav-cta:hover { background: var(--accent) !important; color: var(--paper) !important; }
 
-/* ── Status bar ─────────────────────────────────────────────────── */
-.status-bar {
-  position: relative; z-index: 10;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 22px 0;
-  font-size: 12px; font-weight: 500; color: var(--text);
-  letter-spacing: 0.3px;
-  flex-shrink: 0;
-}
-.status-time { font-weight: 500; }
-.status-icons { display: flex; gap: 5px; align-items: center; }
-.sig-bar { display: flex; gap: 2px; align-items: flex-end; height: 11px; }
-.sig-bar span { width: 3px; background: var(--text); border-radius: 1px; }
-.sig-bar span:nth-child(1) { height: 3px; }
-.sig-bar span:nth-child(2) { height: 5px; }
-.sig-bar span:nth-child(3) { height: 8px; }
-.sig-bar span:nth-child(4) { height: 11px; }
-.battery {
-  width: 22px; height: 11px; border: 1.5px solid var(--text); border-radius: 2.5px;
-  position: relative;
-}
-.battery::after {
-  content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%);
-  width: 2.5px; height: 5px; background: var(--text); border-radius: 0 1px 1px 0;
-}
-.battery-fill {
-  position: absolute; left: 1.5px; top: 1.5px; bottom: 1.5px;
-  width: 70%; background: var(--text); border-radius: 1px;
-}
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 7rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 90% 70% at 15% 20%, rgba(232,160,32,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 60% at 85% 10%, rgba(200,75,47,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 80% at 80% 85%, rgba(30,79,140,0.16) 0%, transparent 50%),
+      radial-gradient(ellipse 50% 50% at 10% 90%, rgba(42,107,74,0.14) 0%, transparent 45%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, rgba(245,242,235,1) 40%, rgba(237,233,223,1) 100%);
+  }
+  .hero-grain {
+    position: absolute; inset: 0; z-index: 1; opacity: 0.038;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+  .hero-lines {
+    position: absolute; inset: 0; z-index: 1;
+    background-image: linear-gradient(rgba(200,75,47,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(200,75,47,0.04) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 80%);
+  }
+  .glow-tl { position: absolute; top: -120px; left: -100px; z-index: 1; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(232,160,32,0.28) 0%, transparent 65%); filter: blur(40px); animation: floatA 8s ease-in-out infinite; }
+  .glow-br { position: absolute; bottom: -80px; right: -60px; z-index: 1; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(30,79,140,0.22) 0%, transparent 65%); filter: blur(40px); animation: floatB 10s ease-in-out infinite; }
+  .glow-c { position: absolute; top: 30%; left: 50%; transform: translateX(-50%); z-index: 1; width: 400px; height: 300px; border-radius: 50%; background: radial-gradient(ellipse, rgba(200,75,47,0.10) 0%, transparent 70%); filter: blur(30px); animation: floatC 12s ease-in-out infinite; }
+  @keyframes floatA { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(30px,20px) scale(1.05)} }
+  @keyframes floatB { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-20px,-30px) scale(1.08)} }
+  @keyframes floatC { 0%,100%{transform:translateX(-50%) scale(1)} 50%{transform:translateX(-50%) scale(1.12)} }
 
-/* ── Scrollable content ─────────────────────────────────────────── */
-.screen {
-  position: relative; z-index: 1;
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding: 0 0 calc(80px + var(--safe-bottom)) 0;
-}
-.screen::-webkit-scrollbar { display: none; }
+  .img-collage { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .img-spot { position: absolute; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 40px rgba(14,13,11,0.18); border: 2px solid rgba(255,255,255,0.8); opacity: 0; animation: imgReveal 0.8s ease forwards; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+  .img-spot-1 { width: 140px; height: 180px; top: 10%; left: 2%; transform: rotate(-4deg); animation-delay: 0.6s; background: linear-gradient(135deg,#f5e8d0,#e8d0b0,#d4b080); }
+  .img-spot-2 { width: 160px; height: 120px; bottom: 20%; left: 1%; transform: rotate(3deg); animation-delay: 0.9s; background: linear-gradient(135deg,#dce8f0,#bdd4e8,#9ab8d4); }
+  .img-spot-3 { width: 130px; height: 170px; top: 8%; right: 2%; transform: rotate(5deg); animation-delay: 0.75s; background: linear-gradient(135deg,#f0e8d8,#e0d0b8,#ccba90); }
+  .img-spot-4 { width: 150px; height: 130px; bottom: 18%; right: 1%; transform: rotate(-3deg); animation-delay: 1s; background: linear-gradient(135deg,#e0f0e8,#c0dcc8,#9cc4a8); }
+  .img-spot-emoji { font-size: 2.2rem; }
+  .img-spot-cap { font-size: 0.6rem; font-weight: 600; color: var(--ink2); text-align: center; padding: 0 8px; line-height: 1.3; }
+  .img-spot-tag { position: absolute; bottom: 8px; right: 8px; background: rgba(255,255,255,0.8); border-radius: 6px; padding: 2px 6px; font-size: 0.52rem; font-weight: 700; color: var(--ink); letter-spacing: 0.03em; }
+  @keyframes imgReveal { from { opacity: 0; transform: scale(0.85) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-/* ── Header ─────────────────────────────────────────────────────── */
-.header {
-  text-align: center;
-  padding: 24px 24px 20px;
-}
-.logo-ring {
-  width: 58px; height: 58px; border-radius: 50%;
-  border: 1px solid var(--gold);
-  display: inline-flex; align-items: center; justify-content: center;
-  margin-bottom: 14px;
-  box-shadow: 0 0 24px var(--gold-glow), inset 0 0 16px var(--gold-soft);
-  animation: glow 3s ease-in-out infinite;
-  background: white;
-}
-.logo-ring svg { width: 28px; height: 28px; }
-@keyframes glow {
-  0%,100% { box-shadow: 0 0 20px var(--gold-glow); }
-  50%      { box-shadow: 0 0 38px rgba(56,152,210,0.38); }
-}
-.eyebrow {
-  font-size: 9.5px; letter-spacing: 3px; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 6px; opacity: 0.85;
-}
-.brand-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px; font-weight: 600; line-height: 1.15;
-  color: var(--text);
-}
-.header-rule {
-  display: flex; align-items: center; gap: 8px;
-  max-width: 180px; margin: 12px auto 10px;
-}
-.header-rule::before, .header-rule::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold));
-}
-.header-rule::after { background: linear-gradient(90deg, var(--gold), transparent); }
-.rule-mark { font-size: 7px; color: var(--gold); opacity: 0.7; }
-.header-sub {
-  font-size: 13px; line-height: 1.7; color: var(--muted);
-  font-weight: 300; padding: 0 12px;
-}
+  .float-cards { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .fc { position: absolute; background: rgba(255,255,255,0.72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 0.5px solid rgba(255,255,255,0.9); border-radius: 16px; padding: 10px 14px; box-shadow: 0 8px 32px rgba(14,13,11,0.10), 0 1px 0 rgba(255,255,255,0.8) inset; display: flex; align-items: center; gap: 10px; animation: cardFloat linear infinite; white-space: nowrap; }
+  .fc-icon { font-size: 1.4rem; line-height: 1; flex-shrink: 0; }
+  .fc-text { display: flex; flex-direction: column; }
+  .fc-title { font-size: 0.72rem; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+  .fc-sub { font-size: 0.62rem; color: var(--ink3); margin-top: 1px; }
+  .fc-1 { top: 14%; left: 4%; animation-duration: 7s; animation-delay: 0s; }
+  .fc-2 { top: 22%; right: 5%; animation-duration: 9s; animation-delay: -3s; }
+  .fc-3 { bottom: 28%; left: 3%; animation-duration: 8s; animation-delay: -5s; }
+  .fc-4 { bottom: 18%; right: 6%; animation-duration: 10s; animation-delay: -1.5s; }
+  .fc-5 { top: 55%; left: 7%; animation-duration: 11s; animation-delay: -4s; }
+  .fc-6 { top: 50%; right: 4%; animation-duration: 8.5s; animation-delay: -7s; }
+  @keyframes cardFloat { 0%,100% { transform: translateY(0px) rotate(-1deg); } 33% { transform: translateY(-12px) rotate(0.5deg); } 66% { transform: translateY(-6px) rotate(-0.5deg); } }
 
-/* ── Flow strip ─────────────────────────────────────────────────── */
-.flow-wrap {
-  padding: 0 20px 20px;
-  position: relative; z-index: 2;
-}
-.flow-strip {
-  display: flex; align-items: center;
-  background: rgba(255,255,255,0.7);
-  border: 1px solid var(--border);
-  border-radius: 50px;
-  padding: 8px 14px;
-  gap: 0;
-}
-.flow-node { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
-.flow-dot {
-  width: 22px; height: 22px; border-radius: 50%;
-  border: 1px solid var(--dim);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9.5px; color: var(--dim);
-  background: white;
-  transition: all 0.3s; font-weight: 500;
-}
-.flow-dot.active { border-color: var(--gold); color: var(--gold); background: var(--gold-soft); box-shadow: 0 0 8px var(--gold-glow); }
-.flow-dot.done   { border-color: var(--sage); color: var(--sage); background: rgba(46,158,110,0.1); }
-.flow-lbl { font-size: 8.5px; color: var(--dim); letter-spacing: 0.3px; transition: color 0.3s; }
-.flow-lbl.active { color: var(--gold); }
-.flow-lbl.done   { color: var(--sage); }
-.flow-line { flex: 1; height: 1px; background: var(--dim); margin-bottom: 14px; transition: background 0.3s; max-width: 24px; }
-.flow-line.done  { background: var(--sage); }
+  .stat-badge { position: absolute; z-index: 3; background: var(--accent); border-radius: 12px; padding: 10px 16px; pointer-events: none; box-shadow: 0 8px 24px rgba(200,75,47,0.35); }
+  .stat-badge.blue { background: var(--blue); box-shadow: 0 8px 24px rgba(30,79,140,0.35); }
+  .stat-badge.green { background: var(--green); box-shadow: 0 8px 24px rgba(42,107,74,0.35); }
+  .sb-num { font-family: var(--serif); font-size: 1.3rem; color: #fff; line-height: 1; }
+  .sb-label { font-size: 0.58rem; font-weight: 600; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+  .stat-1 { top: 18%; right: 18%; animation: badgePop 0.5s 1.2s cubic-bezier(0.34,1.56,0.64,1) both, statFloat 9s 2s ease-in-out infinite; }
+  .stat-2 { bottom: 32%; left: 12%; animation: badgePop 0.5s 1.5s cubic-bezier(0.34,1.56,0.64,1) both, statFloat 11s 2.5s ease-in-out infinite; }
+  .stat-3 { top: 60%; right: 16%; animation: badgePop 0.5s 1.8s cubic-bezier(0.34,1.56,0.64,1) both, statFloat 8s 2s ease-in-out infinite; }
+  @keyframes badgePop { from{opacity:0;transform:scale(0.7) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
+  @keyframes statFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 
-/* ── Card ───────────────────────────────────────────────────────── */
-.card {
-  margin: 0 16px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 24px 20px;
-  box-shadow: 0 4px 32px rgba(56,152,210,0.1);
-  animation: slideUp 0.35s cubic-bezier(0.22,1,0.36,1) both;
-}
-@keyframes slideUp {
-  from { opacity:0; transform:translateY(18px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-.card-eyebrow {
-  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 8px; opacity: 0.75;
-}
-.card-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 21px; font-weight: 600; line-height: 1.2;
-  color: var(--text); margin-bottom: 5px;
-}
-.card-sub {
-  font-size: 12.5px; color: var(--muted); font-weight: 300;
-  line-height: 1.65; margin-bottom: 22px;
-}
+  .promo-strip { position: absolute; bottom: 22%; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; gap: 12px; align-items: center; background: var(--ink); border-radius: 100px; padding: 8px 20px; pointer-events: none; animation: fadeUp 0.6s 0.9s ease both; white-space: nowrap; box-shadow: 0 16px 40px rgba(14,13,11,0.25); }
+  .promo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); flex-shrink: 0; animation: pulse 2s infinite; }
+  .promo-text { font-size: 0.72rem; font-weight: 600; color: rgba(245,242,235,0.9); letter-spacing: 0.02em; }
+  .promo-text strong { color: var(--accent2); }
 
-/* ── Affirmation banner (step 4) ────────────────────────────────── */
-.affirm-banner {
-  background: linear-gradient(135deg, rgba(56,152,210,0.1) 0%, rgba(30,120,200,0.06) 100%);
-  border: 1px solid rgba(56,152,210,0.2);
-  border-radius: 14px;
-  padding: 16px 16px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-.affirm-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 12.5px;
-  color: var(--text);
-  line-height: 1.55;
-  font-weight: 300;
-}
-.affirm-dot {
-  flex-shrink: 0;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: rgba(56,152,210,0.15);
-  border: 1px solid rgba(56,152,210,0.3);
-  display: flex; align-items: center; justify-content: center;
-  margin-top: 1px;
-}
-.affirm-dot svg { width: 9px; height: 9px; stroke: var(--gold); stroke-width: 2; fill: none; }
+  .hero-content { position: relative; z-index: 10; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.8); border: 0.5px solid rgba(255,255,255,0.95); border-radius: 100px; padding: 0.3rem 0.9rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; color: var(--accent); text-transform: uppercase; margin-bottom: 1.5rem; animation: fadeUp 0.6s ease both; backdrop-filter: blur(8px); }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
 
-/* ── Category grid ──────────────────────────────────────────────── */
-.cat-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px; margin-bottom: 6px;
-}
-.cat-tile {
-  cursor: pointer;
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  padding: 13px 12px 11px;
-  background: rgba(255,255,255,0.6);
-  transition: all 0.18s;
-  user-select: none; position: relative;
-  -webkit-user-select: none;
-}
-.cat-tile:active { transform: scale(0.97); }
-.cat-tile.sel {
-  border-color: var(--gold);
-  background: var(--gold-soft);
-  box-shadow: 0 0 0 1px var(--gold);
-}
-.cat-tile.sel::after {
-  content: '✓'; position: absolute; top: 7px; right: 10px;
-  font-size: 9px; color: var(--gold); font-weight: 700;
-}
-.tile-icon {
-  width: 26px; height: 26px; border-radius: 6px;
-  background: rgba(56,152,210,0.1);
-  border: 1px solid rgba(56,152,210,0.2);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 8px;
-}
-.tile-icon svg { width: 13px; height: 13px; fill: none; stroke: var(--gold); stroke-width: 1.5; }
-.tile-name { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3; margin-bottom: 2px; }
-.tile-hint { font-size: 10px; color: var(--muted); line-height: 1.4; font-weight: 300; }
+  .hero h1 { font-family: var(--serif); font-size: clamp(3rem, 8vw, 6.5rem); line-height: 1.0; letter-spacing: -0.03em; color: var(--ink); animation: fadeUp 0.6s 0.1s ease both; max-width: 900px; }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero h1 .under { position: relative; display: inline-block; }
+  .hero h1 .under::after { content: ''; position: absolute; bottom: 4px; left: 0; right: 0; height: 3px; background: var(--accent2); border-radius: 2px; transform: scaleX(0); transform-origin: left; animation: underlineIn 0.6s 0.8s ease forwards; }
+  @keyframes underlineIn { to { transform: scaleX(1); } }
 
-/* ── Chips ──────────────────────────────────────────────────────── */
-.chips { display: flex; flex-wrap: wrap; gap: 7px; }
-.chip {
-  cursor: pointer;
-  padding: 6px 12px; border-radius: 30px;
-  border: 1px solid var(--border);
-  font-size: 12px; color: var(--muted);
-  background: white;
-  transition: all 0.16s; user-select: none;
-  -webkit-user-select: none;
-}
-.chip:active { transform: scale(0.96); }
-.chip.sel { border-color: var(--gold); background: var(--gold-soft); color: var(--text); font-weight: 500; }
+  .hero-sub { font-size: clamp(1rem, 2vw, 1.15rem); color: var(--ink2); font-weight: 400; max-width: 520px; line-height: 1.65; margin: 1.5rem auto; animation: fadeUp 0.6s 0.2s ease both; }
 
-/* ── Urgency ────────────────────────────────────────────────────── */
-.urg-row { display: grid; grid-template-columns: repeat(5,1fr); gap: 5px; }
-.urg-btn {
-  cursor: pointer;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px 3px;
-  text-align: center; font-size: 10.5px; color: var(--muted);
-  background: white; transition: all 0.16s;
-  user-select: none; -webkit-user-select: none;
-  line-height: 1.3;
-}
-.urg-btn:active { transform: scale(0.95); }
-.urg-val { font-size: 13px; font-weight: 600; color: var(--dim); display: block; margin-bottom: 3px; }
-.urg-btn.sel { border-color: var(--gold); background: var(--gold-soft); color: var(--text); }
-.urg-btn.sel .urg-val { color: var(--gold); }
+  .hero-form, .waitlist-form { display: flex; gap: 0.5rem; background: rgba(255,255,255,0.85); border: 0.5px solid rgba(255,255,255,0.95); border-radius: 100px; padding: 0.35rem; width: 100%; max-width: 440px; margin: 0 auto 1rem; animation: fadeUp 0.6s 0.3s ease both; box-shadow: 0 2px 24px rgba(14,13,11,0.10); backdrop-filter: blur(10px); }
+  .waitlist-form { background: rgba(245,242,235,0.08); border-color: rgba(245,242,235,0.15); animation: none; box-shadow: none; }
+  .hero-form input, .waitlist-form input { flex: 1; background: none; border: none; outline: none; padding: 0.5rem 0.75rem; font-family: var(--sans); font-size: 0.9rem; color: var(--ink); }
+  .waitlist-form input { color: var(--paper); }
+  .waitlist-form input::placeholder { color: rgba(245,242,235,0.3); }
+  .hero-form input::placeholder { color: var(--ink3); }
+  .hero-form button, .waitlist-form button { background: var(--ink); color: var(--paper); border: none; border-radius: 100px; padding: 0.6rem 1.4rem; font-family: var(--sans); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s; white-space: nowrap; }
+  .waitlist-form button { background: var(--accent); color: #fff; }
+  .hero-form button:hover, .waitlist-form button:hover { background: var(--accent); transform: scale(1.02); }
+  .hero-form button:active, .waitlist-form button:active { transform: scale(0.98); }
 
-/* ── Fields ─────────────────────────────────────────────────────── */
-.field { margin-bottom: 14px; }
-.field-label {
-  display: block; font-size: 11.5px; font-weight: 500;
-  color: var(--muted); margin-bottom: 6px; letter-spacing: 0.2px;
-}
-.req { color: var(--gold); }
-input, select, textarea {
-  width: 100%; padding: 11px 13px;
-  font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 300;
-  color: var(--text); background: rgba(240,248,255,0.8);
-  border: 1px solid var(--border); border-radius: 10px; outline: none;
-  transition: border-color 0.2s; caret-color: var(--gold);
-  -webkit-appearance: none; appearance: none;
-}
-input:focus, select:focus, textarea:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 2.5px var(--gold-soft);
-  background: white;
-}
-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235a8aaa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; background-color: rgba(240,248,255,0.8); }
-select option { background: #ffffff; color: #0d2d45; }
-textarea { resize: none; height: 100px; line-height: 1.6; }
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hero-note { font-size: 0.75rem; color: var(--ink3); animation: fadeUp 0.6s 0.4s ease both; }
 
-/* ── Notice ─────────────────────────────────────────────────────── */
-.notice {
-  border-radius: 10px; padding: 11px 13px;
-  font-size: 11.5px; line-height: 1.6;
-  display: flex; gap: 9px; align-items: flex-start;
-  margin-top: 16px;
-}
-.notice.green { background: rgba(46,158,110,0.07); border: 1px solid rgba(46,158,110,0.22); color: #2e7a55; }
-.notice.amber { background: var(--gold-soft); border: 1px solid rgba(56,152,210,0.22); color: #2a6fa0; }
-.notice-mark { flex-shrink: 0; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; margin-top: 1px; }
-.notice.green .notice-mark { background: rgba(46,158,110,0.2); color: #2e9e6e; }
-.notice.amber .notice-mark { background: rgba(56,152,210,0.15); color: #2a8fc9; }
+  .hero-colleges { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: center; margin-top: 2.5rem; animation: fadeUp 0.6s 0.5s ease both; }
+  .hero-colleges span { font-size: 0.72rem; font-weight: 500; color: var(--ink3); letter-spacing: 0.04em; text-transform: uppercase; }
+  .college-pill { background: rgba(255,255,255,0.75); border: 0.5px solid rgba(255,255,255,0.9); border-radius: 100px; padding: 0.25rem 0.75rem; font-size: 0.72rem; font-weight: 600; color: var(--ink2); backdrop-filter: blur(8px); transition: all 0.2s; cursor: default; }
+  .college-pill:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
-/* ── Trust pills ────────────────────────────────────────────────── */
-.trust-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
-.tpill {
-  font-size: 10.5px; color: var(--muted);
-  background: rgba(56,152,210,0.07); border: 1px solid var(--border);
-  border-radius: 30px; padding: 4px 10px;
-}
+  @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 
-/* ── Summary ────────────────────────────────────────────────────── */
-.summ-row {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  padding: 11px 0; border-bottom: 1px solid rgba(56,152,210,0.08); gap: 10px;
-}
-.summ-row:last-child { border-bottom: none; }
-.sk { font-size: 11px; color: var(--dim); min-width: 80px; padding-top: 1px; }
-.sv { font-size: 12.5px; color: var(--text); text-align: right; font-weight: 300; line-height: 1.5; }
+  .success-msg { display: none; padding: 0.6rem 1.2rem; background: rgba(42,107,74,0.15); border: 0.5px solid rgba(42,107,74,0.3); border-radius: 100px; color: #2a6b4a; font-size: 0.82rem; font-weight: 500; margin: 0 auto; max-width: 360px; text-align: center; }
 
-/* ── Confirm ────────────────────────────────────────────────────── */
-.confirm-center { text-align: center; }
-.confirm-mark {
-  width: 64px; height: 64px; border-radius: 50%;
-  border: 1px solid var(--gold);
-  background: var(--gold-soft);
-  display: inline-flex; align-items: center; justify-content: center;
-  margin-bottom: 18px;
-  box-shadow: 0 0 32px var(--gold-glow);
-  animation: popIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
-}
-.confirm-mark svg { width: 26px; height: 26px; stroke: var(--gold); stroke-width: 1.5; fill: none; }
-@keyframes popIn { from { transform:scale(0.4); opacity:0; } to { transform:scale(1); opacity:1; } }
-.confirm-title { font-family:'Playfair Display',serif; font-size:24px; margin-bottom: 7px; color: var(--text); }
-.confirm-sub { font-size:13px; color:var(--muted); font-weight:300; line-height:1.7; margin-bottom:22px; }
+  /* COUNTDOWN */
+  .countdown-section {
+    background: var(--ink);
+    padding: 5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .countdown-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 20% 50%, rgba(200,75,47,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 60% at 80% 50%, rgba(30,79,140,0.15) 0%, transparent 60%);
+  }
+  .countdown-inner { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+  .countdown-eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent2); margin-bottom: 1rem; }
+  .countdown-title { font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--paper); margin-bottom: 0.5rem; }
+  .countdown-title em { font-style: italic; color: var(--accent2); }
+  .countdown-sub { font-size: 0.9rem; color: rgba(245,242,235,0.4); margin-bottom: 3rem; }
+  .countdown-grid { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  .cd-unit { display: flex; flex-direction: column; align-items: center; background: rgba(245,242,235,0.06); border: 0.5px solid rgba(245,242,235,0.1); border-radius: 20px; padding: 1.5rem 2rem; min-width: 110px; position: relative; overflow: hidden; }
+  .cd-unit::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(245,242,235,0.05) 0%, transparent 60%); }
+  .cd-num { font-family: var(--serif); font-size: clamp(3rem, 6vw, 5rem); color: var(--paper); line-height: 1; letter-spacing: -0.04em; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); position: relative; }
+  .cd-num.flip { animation: numFlip 0.4s ease; }
+  @keyframes numFlip { 0% { transform: translateY(-8px) scale(0.9); opacity: 0.5; } 60% { transform: translateY(4px) scale(1.05); } 100% { transform: translateY(0) scale(1); opacity: 1; } }
+  .cd-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,242,235,0.35); margin-top: 0.5rem; }
+  .cd-accent { position: absolute; top: 8px; right: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); animation: pulse 2s infinite; }
+  .launch-bar { margin-top: 2.5rem; background: rgba(245,242,235,0.06); border: 0.5px solid rgba(245,242,235,0.1); border-radius: 100px; height: 6px; max-width: 400px; margin-left: auto; margin-right: auto; overflow: hidden; }
+  .launch-bar-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 1s ease; }
+  .launch-bar-label { font-size: 0.7rem; color: rgba(245,242,235,0.3); margin-top: 0.75rem; }
 
-.ast-card {
-  display: flex; align-items: center; gap: 12px;
-  padding: 13px 14px; border-radius: 12px;
-  background: var(--gold-soft); border: 1px solid rgba(56,152,210,0.2);
-  margin-bottom: 20px; text-align: left;
-}
-.ast-av {
-  width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
-  background: linear-gradient(135deg, #2a8fc9, #1a5f9a);
-  display: flex; align-items: center; justify-content: center;
-}
-.ast-av svg { width: 18px; height: 18px; stroke: rgba(200,235,255,0.9); stroke-width: 1.4; fill: none; }
-.ast-name { font-weight: 500; font-size: 14px; margin-bottom: 2px; color: var(--text); }
-.ast-meta { font-size: 10.5px; color: var(--muted); }
-.ast-badge {
-  margin-left: auto; background: rgba(46,158,110,0.1);
-  border: 1px solid rgba(46,158,110,0.3);
-  border-radius: 20px; padding: 3px 9px;
-  font-size: 10px; color: var(--sage); white-space: nowrap;
-}
-.prep-list { list-style:none; display:flex; flex-direction:column; gap:8px; text-align:left; }
-.prep-list li {
-  display:flex; gap:9px; align-items:flex-start;
-  font-size:12.5px; color:var(--muted); line-height:1.55; font-weight:300;
-}
-.prep-list li::before { content:'—'; color:var(--gold); flex-shrink:0; margin-top:0; opacity:0.6; }
+  /* TICKER */
+  .ticker-section { padding: 2rem 0; overflow: hidden; background: var(--ink); }
+  .ticker-wrap { display: flex; }
+  .ticker-track { display: flex; gap: 1.5rem; align-items: center; animation: ticker 25s linear infinite; white-space: nowrap; padding-right: 1.5rem; }
+  .ticker-track2 { animation-delay: -12.5s; }
+  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .ticker-item { font-family: var(--serif); font-size: 1.1rem; color: rgba(245,242,235,0.4); font-style: italic; flex-shrink: 0; }
+  .ticker-item.hi { color: rgba(245,242,235,0.9); }
+  .ticker-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(245,242,235,0.2); flex-shrink: 0; }
 
-/* ── Fixed CTA bar ──────────────────────────────────────────────── */
-.cta-bar {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  z-index: 10;
-  padding: 12px 16px calc(12px + var(--safe-bottom));
-  background: linear-gradient(to top, var(--bg) 60%, transparent);
-}
-.btn-row { display: flex; gap: 8px; }
-.btn-back {
-  padding: 13px 18px; border-radius: 12px;
-  border: 1px solid var(--border); background: white;
-  font-family: 'Outfit', sans-serif; font-size: 13.5px;
-  color: var(--muted); cursor: pointer; transition: all 0.18s;
-  white-space: nowrap;
-}
-.btn-back:active { border-color: var(--gold); color: var(--text); }
-.btn-cta {
-  flex: 1; padding: 14px 20px; border-radius: 12px; border: none;
-  background: linear-gradient(135deg, #2a8fc9, #1a5f9a);
-  font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 500;
-  color: #fff; cursor: pointer; transition: all 0.18s;
-  letter-spacing: 0.2px;
-  box-shadow: 0 4px 20px rgba(42,143,201,0.3);
-}
-.btn-cta:active { transform: scale(0.98); }
-.btn-cta:disabled { opacity: 0.4; }
-@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px)} 60%{transform:translateX(4px)} 80%{transform:translateX(-2px)} }
-.shake { animation: shake 0.3s ease; }
+  /* LIVE PULSE */
+  .pulse-section { padding: 3rem 2rem; background: var(--paper); border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); overflow: hidden; }
+  .pulse-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .pulse-left { flex: 1; min-width: 200px; }
+  .pulse-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 0.25rem; }
+  .pulse-num { font-family: var(--serif); font-size: clamp(3rem, 6vw, 4.5rem); color: var(--ink); line-height: 1; letter-spacing: -0.04em; }
+  .pulse-num span { color: var(--accent); }
+  .pulse-sub { font-size: 0.8rem; color: var(--ink3); margin-top: 0.25rem; }
+  .pulse-feed { flex: 2; min-width: 280px; display: flex; flex-direction: column; gap: 8px; max-height: 160px; overflow: hidden; position: relative; }
+  .pulse-feed::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: linear-gradient(transparent, var(--paper)); pointer-events: none; }
+  .pulse-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(255,255,255,0.7); border: 0.5px solid rgba(255,255,255,0.95); border-radius: 10px; font-size: 0.78rem; color: var(--ink2); animation: slideInRight 0.5s cubic-bezier(0.34,1.3,0.64,1) both; }
+  @keyframes slideInRight { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+  .pulse-avatar { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .pulse-name { font-weight: 600; color: var(--ink); }
+  .pulse-time { font-size: 0.65rem; color: var(--ink3); margin-left: auto; flex-shrink: 0; }
+  .pulse-bar-wrap { flex: 0 0 160px; }
+  .pulse-college-bars { display: flex; flex-direction: column; gap: 6px; }
+  .pcb-row { display: flex; align-items: center; gap: 8px; }
+  .pcb-name { font-size: 0.65rem; font-weight: 600; color: var(--ink2); width: 70px; flex-shrink: 0; }
+  .pcb-track { flex: 1; height: 5px; background: var(--cream); border-radius: 100px; overflow: hidden; }
+  .pcb-fill { height: 100%; border-radius: 100px; background: var(--accent); transition: width 1s ease; }
+  .pcb-count { font-size: 0.6rem; color: var(--ink3); width: 20px; text-align: right; flex-shrink: 0; }
 
-.section-gap { margin-top: 20px; }
-.field-hint { font-size: 10px; color: var(--dim); margin-top: 4px; }
+  /* ROLL CALL */
+  .rollcall-section { padding: 5rem 2rem; background: var(--paper); position: relative; overflow: hidden; }
+  .rollcall-inner { max-width: 1100px; margin: 0 auto; }
+  .rollcall-head { text-align: center; margin-bottom: 3rem; }
+  .rollcall-head p { font-size: 1rem; color: var(--ink2); max-width: 480px; margin: 0.75rem auto 0; line-height: 1.6; }
+  .rollcall-counter { display: inline-flex; align-items: center; gap: 0.75rem; background: rgba(200,75,47,0.1); border: 0.5px solid rgba(200,75,47,0.2); border-radius: 100px; padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-top: 1rem; }
+  .rc-count-num { font-family: var(--serif); font-size: 1.1rem; }
+  .college-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-top: 2rem; }
+  .college-tile { border: 1.5px solid var(--border); border-radius: 16px; padding: 1rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.34,1.3,0.64,1); background: rgba(255,255,255,0.5); position: relative; overflow: hidden; user-select: none; }
+  .college-tile::before { content: ''; position: absolute; inset: 0; background: var(--tile-color, var(--accent)); opacity: 0; transition: opacity 0.25s; border-radius: inherit; }
+  .college-tile:hover { transform: translateY(-3px) scale(1.02); border-color: var(--tile-color, var(--accent)); box-shadow: 0 8px 24px rgba(14,13,11,0.1); }
+  .college-tile.claimed { border-color: var(--tile-color, var(--accent)); background: rgba(255,255,255,0.9); }
+  .college-tile.claimed::before { opacity: 0.08; }
+  .college-tile:active { transform: scale(0.97); }
+  .tile-emoji { font-size: 1.5rem; margin-bottom: 0.4rem; display: block; }
+  .tile-name { font-size: 0.82rem; font-weight: 700; color: var(--ink); line-height: 1.2; margin-bottom: 0.2rem; position: relative; }
+  .tile-full { font-size: 0.65rem; color: var(--ink3); line-height: 1.3; position: relative; }
+  .tile-count { display: flex; align-items: center; gap: 4px; margin-top: 0.5rem; font-size: 0.65rem; font-weight: 700; color: var(--tile-color, var(--accent)); position: relative; }
+  .tile-count-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+  .tile-check { position: absolute; top: 8px; right: 8px; width: 22px; height: 22px; border-radius: 50%; background: var(--tile-color, var(--accent)); display: none; align-items: center; justify-content: center; font-size: 0.65rem; color: white; animation: checkPop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  .college-tile.claimed .tile-check { display: flex; }
+  @keyframes checkPop { from{transform:scale(0)} to{transform:scale(1)} }
+  .rollcall-cta { text-align: center; margin-top: 2rem; font-size: 0.82rem; color: var(--ink3); }
+  .rollcall-cta strong { color: var(--ink); }
+
+  /* CONFETTI */
+  .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
+  .confetti-piece { position: absolute; width: 8px; height: 8px; border-radius: 2px; animation: confettiFall linear forwards; }
+  @keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+  /* PHONE PREVIEW — dual */
+  .preview { padding: 4rem 2rem 5rem; display: flex; justify-content: center; overflow: hidden; gap: 0; }
+  .phone-frame { width: 280px; flex-shrink: 0; background: var(--ink); border-radius: 36px; padding: 12px; box-shadow: 0 32px 64px rgba(14,13,11,0.2); transform: rotate(-2deg); transition: transform 0.4s; }
+  .phone-frame:hover { transform: rotate(0deg) scale(1.02); }
+  .phone-screen { background: var(--paper); border-radius: 26px; overflow: hidden; height: 520px; display: flex; flex-direction: column; }
+  .phone-status { height: 32px; flex-shrink: 0; background: var(--paper); display: flex; align-items: center; justify-content: space-between; padding: 0 18px; font-size: 0.65rem; font-weight: 600; color: var(--ink); }
+  .phone-nav { height: 48px; flex-shrink: 0; background: var(--paper); border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+  .phone-nav-logo { font-family: var(--serif); font-size: 1.1rem; }
+  .phone-nav-logo span { color: var(--accent); font-style: italic; }
+  .phone-tabs { display: flex; flex-shrink: 0; border-bottom: 0.5px solid var(--border); }
+  .phone-tab { flex: 1; padding: 8px 0; text-align: center; font-size: 0.62rem; font-weight: 600; color: var(--ink3); border-bottom: 2px solid transparent; }
+  .phone-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  
+  .feed { flex: 1; padding: 10px 12px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+  .feed::-webkit-scrollbar { display: none; }
+  
+  .post { background: #fff; border-radius: 12px; border: 0.5px solid var(--border); overflow: hidden; flex-shrink: 0; }
+  .post-head { display: flex; align-items: center; gap: 8px; padding: 8px 10px; }
+  .avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .post-meta { flex: 1; }
+  .post-name { font-size: 0.65rem; font-weight: 600; color: var(--ink); }
+  .post-college { font-size: 0.58rem; color: var(--ink3); }
+  .post-badge { font-size: 0.52rem; font-weight: 700; padding: 2px 6px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .post-img { width: 100%; height: 110px; background: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: var(--ink3); font-weight: 500; }
+  .post-body { padding: 8px 10px; font-size: 0.63rem; color: var(--ink2); line-height: 1.4; }
+  .post-actions { display: flex; gap: 12px; padding: 6px 10px 8px; border-top: 0.5px solid var(--border); }
+  .post-act { font-size: 0.58rem; color: var(--ink3); font-weight: 500; }
+  .store-scroll { display: flex; gap: 8px; padding: 10px 12px; overflow-x: auto; }
+  .store-scroll::-webkit-scrollbar { display: none; }
+  .product-card { flex-shrink: 0; width: 110px; background: #fff; border-radius: 10px; border: 0.5px solid var(--border); overflow: hidden; }
+  .product-img { height: 80px; background: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+  .product-info { padding: 6px 8px; }
+  .product-name { font-size: 0.6rem; font-weight: 600; color: var(--ink); }
+  .product-price { font-size: 0.65rem; font-weight: 700; color: var(--accent); margin-top: 2px; }
+  .product-college { font-size: 0.52rem; color: var(--ink3); }
+
+  /* SPORTS PHONE — white theme, matches phone1 */
+  .phone-frame2 { width: 260px; flex-shrink: 0; background: var(--ink); border-radius: 36px; padding: 12px; box-shadow: 0 24px 48px rgba(14,13,11,0.18); transform: rotate(2deg) translateY(30px); transition: transform 0.4s; margin-left: -30px; }
+  .phone-frame2:hover { transform: rotate(0deg) translateY(0) scale(1.02); }
+  .phone-screen2 { background: var(--paper); border-radius: 26px; overflow: hidden; height: 520px; display: flex; flex-direction: column; }
+  .sports-nav { height: 44px; flex-shrink: 0; background: var(--paper); border-bottom: 0.5px solid var(--border); display: flex; align-items: center; padding: 0 14px; gap: 8px; }
+  .sports-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); }
+  .sports-logo span { color: var(--accent); font-style: italic; }
+  .sports-pill { margin-left: auto; background: rgba(42,107,74,0.1); border: 1px solid rgba(42,107,74,0.2); border-radius: 100px; padding: 2px 8px; font-size: 0.52rem; font-weight: 700; color: var(--green); letter-spacing: 0.04em; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
+  .sports-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
+  .sports-tabs { display: flex; flex-shrink: 0; border-bottom: 0.5px solid var(--border); }
+  .sports-tab { flex: 1; padding: 8px 0; text-align: center; font-size: 0.58rem; font-weight: 600; color: var(--ink3); border-bottom: 2px solid transparent; }
+  .sports-tab.active { color: var(--green); border-bottom-color: var(--green); }
+  .sports-feed { flex: 1; padding: 10px 10px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
+  .sports-feed::-webkit-scrollbar { display: none; }
+  .sport-card { background: #fff; border-radius: 10px; padding: 10px; border: 0.5px solid var(--border); position: relative; overflow: hidden; flex-shrink: 0; }
+  .sport-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--sc); }
+  .sc-top { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .sc-icon { font-size: 1rem; }
+  .sc-title { font-size: 0.63rem; font-weight: 700; color: var(--ink); flex: 1; line-height: 1.2; }
+  .sc-badge { font-size: 0.5rem; font-weight: 700; padding: 2px 6px; border-radius: 100px; background: var(--sc); color: #fff; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; opacity: 0.9; }
+  .sc-body { font-size: 0.58rem; color: var(--ink3); line-height: 1.4; margin-bottom: 6px; }
+  .sc-footer { display: flex; align-items: center; justify-content: space-between; border-top: 0.5px solid var(--border); padding-top: 5px; }
+  .sc-meta { font-size: 0.54rem; color: var(--ink3); }
+  .sc-join { background: var(--sc); border-radius: 6px; padding: 3px 8px; font-size: 0.54rem; font-weight: 700; color: #fff; opacity: 0.9; }
+  .sport-card.orange { --sc: #c84b2f; }
+  .sport-card.green  { --sc: #2a6b4a; }
+  .sport-card.blue   { --sc: #1e4f8c; }
+  .sport-card.yellow { --sc: #e8a020; }
+  .sport-header { padding: 2px 10px 4px; display: flex; align-items: center; gap: 6px; }
+  .sport-header-title { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); }
+
+  /* FEATURES */
+  .features { background: var(--cream); }
+  .features-inner { max-width: 1100px; margin: 0 auto; }
+  .features-head { text-align: center; margin-bottom: 3.5rem; }
+  .features-head p { font-size: 1.05rem; color: var(--ink2); max-width: 480px; margin: 0 auto; line-height: 1.6; }
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5px; background: var(--border); border: 0.5px solid var(--border); border-radius: 20px; overflow: hidden; }
+  .feature-card { background: var(--cream); padding: 2rem; transition: background 0.2s; }
+  .feature-card:hover { background: var(--paper); }
+  .feat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1rem; }
+  .feat-title { font-size: 1.05rem; font-weight: 600; color: var(--ink); margin-bottom: 0.4rem; }
+  .feat-desc { font-size: 0.88rem; color: var(--ink2); line-height: 1.6; }
+  .feat-tag { display: inline-block; margin-top: 0.75rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; padding: 0.2rem 0.6rem; border-radius: 100px; text-transform: uppercase; }
+
+  /* HOW */
+  .how { max-width: 900px; margin: 0 auto; }
+  .how-head { margin-bottom: 3rem; }
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 2rem; align-items: flex-start; padding: 2rem 0; border-bottom: 0.5px solid var(--border); }
+  .step:last-child { border-bottom: none; }
+  .step-num { font-family: var(--serif); font-size: 3rem; font-weight: 400; color: var(--cream); line-height: 1; flex-shrink: 0; width: 56px; text-align: right; -webkit-text-stroke: 1px var(--border); }
+  .step-content { flex: 1; }
+  .step-title { font-size: 1.2rem; font-weight: 600; color: var(--ink); margin-bottom: 0.4rem; }
+  .step-desc { font-size: 0.9rem; color: var(--ink2); line-height: 1.65; }
+
+  /* ECHO WALL */
+  .echo-section {
+    padding: 5rem 0 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 800px;
+    background-color: #8c2a1c;
+  }
+  .echo-wall-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background-color: #9b2c20;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40' viewBox='0 0 120 40'%3E%3Crect width='120' height='40' fill='%239b2c20'/%3E%3Cpath d='M0 19h120v2H0zM59 0v19h2V0zM119 21v19h2V21zM-1 21v19h2V21z' fill='%23c8bdae' fill-opacity='0.7'/%3E%3Cpath d='M0 21h120v1H0zM61 0v19h1V0zM121 21v19h1V21zM1 21v19h1V21z' fill='%23000000' fill-opacity='0.2'/%3E%3C/svg%3E");
+    opacity: 1;
+  }
+  .echo-section::after {
+    content: ''; position: absolute; inset: 0; z-index: 1;
+    background: radial-gradient(circle at 50% 30%, transparent 30%, rgba(0,0,0,0.8) 130%);
+    pointer-events: none;
+  }
+  .echo-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; padding: 0 2rem; }
+  .echo-head { padding-top: 5rem; margin-bottom: 2rem; text-align: center; }
+  .echo-head .section-label { color: var(--paper); background: rgba(0,0,0,0.4); padding: 6px 16px; border-radius: 100px; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); }
+  .echo-head .section-label::before { display: none; }
+  .echo-head h2 { color: #f5f2eb; text-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+  .echo-head p { color: rgba(245,242,235,0.8); font-size: 1rem; max-width: 520px; line-height: 1.6; margin: 0.5rem auto 0; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+  .echo-form-wrap {
+    background: rgba(255,255,255,0.95); border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 16px; padding: 1.5rem; margin-bottom: 3rem;
+    backdrop-filter: blur(12px); box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+    position: relative; z-index: 10;
+  }
+  .echo-form-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+  .echo-form-row:last-child { margin-bottom: 0; }
+  .echo-select, .echo-input {
+    background: rgba(14,13,11,0.04); border: 1px solid rgba(14,13,11,0.1);
+    border-radius: 10px; padding: 0.8rem 1rem;
+    font-family: var(--sans); font-size: 0.9rem; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .echo-input-small { flex: 1; min-width: 100px; }
+  .echo-select { flex: 1.5; min-width: 140px; }
+  .echo-input-large { flex: 3; min-width: 100%; }
+  .echo-select:focus, .echo-input:focus { border-color: var(--accent); background: #fff; }
+  .echo-char { display: flex; align-items: center; padding: 0 0.5rem; font-size: 0.75rem; color: var(--ink3); font-weight: 600; }
+  .echo-submit {
+    background: var(--ink); color: #fff; border: none; border-radius: 10px;
+    padding: 0.8rem 1.6rem; font-family: var(--sans); font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: background 0.2s, transform 0.15s; white-space: nowrap;
+  }
+  .echo-submit:hover { background: var(--accent); transform: scale(1.02); }
+  .echo-pending-msg {
+    display: none; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 1rem; padding: 0.8rem;
+    background: rgba(232,160,32,0.15); border: 1px solid rgba(232,160,32,0.3);
+    border-radius: 10px; font-size: 0.85rem; font-weight: 500; color: #a67216;
+  }
+  .mod-queue-wrap {
+    background: #fff; border: 2px solid var(--accent); border-radius: 16px;
+    padding: 1.5rem; margin-bottom: 2rem; display: none;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4); position: relative; z-index: 10;
+  }
+  .mod-queue-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; }
+  .mod-queue-title span { background: var(--accent); color: white; padding: 2px 8px; border-radius: 100px; }
+  .mod-item { display: flex; align-items: center; gap: 12px; background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+  .mod-info { flex: 1; }
+  .mod-info-college { font-size: 0.7rem; font-weight: 700; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+  .mod-info-text { font-size: 0.9rem; color: var(--ink); font-weight: 500; }
+  .mod-actions { display: flex; gap: 8px; }
+  .mod-actions button { padding: 6px 12px; border: none; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: var(--sans); }
+  .btn-approve { background: #dcfce7; color: #166534; }
+  .btn-approve:hover { background: #bbf7d0; }
+  .btn-reject { background: #fee2e2; color: #991b1b; }
+  .btn-reject:hover { background: #fecaca; }
+
+  /* COMPACT ECHO TILES */
+  .echo-wall {
+    column-count: 4;
+    column-gap: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 5rem;
+  }
+  @media (max-width: 1024px) { .echo-wall { column-count: 3; } }
+  @media (max-width: 768px) { .echo-wall { column-count: 2; } }
+  @media (max-width: 480px) { .echo-wall { column-count: 1; } }
+
+  .white-tile {
+    break-inside: avoid;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15), inset 0 2px 0 rgba(255,255,255,1);
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transform: translateY(0);
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+    animation: tileReveal 0.6s ease both;
+  }
+  .white-tile:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.25), inset 0 2px 0 rgba(255,255,255,1); z-index: 5; }
+  @keyframes tileReveal { from{opacity:0;transform:scale(0.95) translateY(15px)} to{opacity:1;transform:scale(1) translateY(0)} }
+  .wt-accent { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--tc); }
+  .wt-text { font-family: var(--sans); font-size: 0.82rem; font-weight: 500; color: #1a1a1a; line-height: 1.45; margin-bottom: 0.8rem; margin-top: 0.2rem; }
+  .wt-footer { display: flex; align-items: center; justify-content: space-between; border-top: 0.5px solid var(--border); padding-top: 0.6rem; }
+  .wt-meta { display: flex; align-items: center; gap: 6px; flex: 1; }
+  .wt-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tc); }
+  .wt-college { font-size: 0.65rem; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 0.04em; }
+  .wl-actions { display: flex; gap: 6px; }
+  .wl-btn { background: rgba(0,0,0,0.04); border: none; border-radius: 6px; padding: 4px 8px; font-family: var(--sans); font-size: 0.65rem; font-weight: 700; color: var(--ink3); cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 4px; }
+  .wl-btn:hover { background: rgba(0,0,0,0.08); transform: scale(1.05); }
+  .wl-btn.active-w { background: var(--green); color: white; }
+  .wl-btn.active-l { background: var(--accent); color: white; }
+
+  /* GENERAL */
+  section { padding: 5rem 2rem; }
+  .section-label { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+  .section-label::before { content: ''; width: 20px; height: 1.5px; background: var(--accent); }
+  h2 { font-family: var(--serif); font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 1rem; }
+  h2 em { font-style: italic; color: var(--accent); }
+
+  /* WAITLIST & FOOTER */
+  .waitlist { background: var(--ink); color: var(--paper); text-align: center; padding: 6rem 2rem; }
+  .waitlist h2 { color: var(--paper); }
+  .waitlist h2 em { color: var(--accent2); }
+  .waitlist p { color: rgba(245,242,235,0.6); margin: 1rem auto 2rem; max-width: 440px; font-size: 1rem; line-height: 1.6; }
+  .waitlist-count { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: rgba(245,242,235,0.5); margin-top: 1.5rem; }
+  .count-avatars { display: flex; }
+  .count-av { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--ink); margin-left: -6px; font-size: 0.55rem; font-weight: 700; color: #fff; display: flex; align-items: center; justify-content: center; }
+  .count-av:first-child { margin-left: 0; }
+  footer { background: var(--ink); border-top: 0.5px solid rgba(245,242,235,0.08); padding: 2rem 2.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  footer .foot-logo { font-family: var(--serif); font-size: 1.2rem; color: var(--paper); }
+  footer .foot-logo span { color: var(--accent); font-style: italic; }
+  footer p { font-size: 0.78rem; color: rgba(245,242,235,0.3); }
+  footer nav { position: static; border: none; background: none; height: auto; padding: 0; }
+  footer nav a { font-size: 0.78rem; color: rgba(245,242,235,0.4); text-decoration: none; }
+  footer nav a:hover { color: var(--paper); }
+
+  /* Admin Login Modal */
+  .admin-modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+  .admin-box { background: var(--paper); padding: 2rem; border-radius: 16px; width: 100%; max-width: 320px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+  .admin-box h3 { margin-bottom: 1rem; font-family: var(--serif); color: var(--ink); font-size: 1.8rem; }
+  .admin-input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 8px; font-family: var(--sans); }
+  .admin-btn { width: 100%; padding: 0.8rem; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+  .admin-close { position: absolute; top: 1rem; right: 1rem; color: white; font-size: 1.5rem; cursor: pointer; }
+
+  @media (max-width: 900px) {
+    .img-spot-1, .img-spot-3 { width: 100px; height: 130px; }
+    .img-spot-2, .img-spot-4 { width: 110px; height: 90px; }
+    .stat-1, .stat-2, .stat-3 { display: none; }
+    .fc-5, .fc-6 { display: none; }
+    .college-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0 1.25rem; }
+    .nav-links { display: none; }
+    .phone-frame2 { display: none; }
+    .preview { padding: 2rem 1.5rem; }
+    .img-spot-1, .img-spot-2, .img-spot-3, .img-spot-4 { display: none; }
+    .fc-3, .fc-4 { display: none; }
+    .promo-strip { font-size: 0.65rem; padding: 6px 14px; }
+    .cd-unit { padding: 1rem 1.2rem; min-width: 80px; }
+    .countdown-grid { gap: 8px; }
+  }
+  @media (max-width: 480px) {
+    .fc-1, .fc-2 { display: none; }
+    .promo-strip { display: none; }
+    .echo-form-row { flex-direction: column; }
+    .pulse-bar-wrap { display: none; }
+  }
 </style>
 </head>
 <body>
 
-<div class="phone-shell">
+<nav>
+  <a href="#" class="nav-logo">Un<span>rest</span></a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#rollcall">Roll Call</a>
+    <a onclick="scrollToEchoWall()">Echo Wall</a>
+    <a href="#waitlist" class="nav-cta">Join waitlist</a>
+  </div>
+</nav>
 
-  <!-- Stars -->
-  <div class="stars" id="stars"></div>
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-lines"></div>
+  <div class="glow-tl"></div>
+  <div class="glow-br"></div>
+  <div class="glow-c"></div>
 
-  <!-- Status bar -->
-  <div class="status-bar">
-    <span class="status-time" id="clock">9:41</span>
-    <div class="status-icons">
-      <div class="sig-bar"><span></span><span></span><span></span><span></span></div>
-      <div class="battery"><div class="battery-fill"></div></div>
-    </div>
+  <div class="img-collage">
+    <div class="img-spot img-spot-1"><div class="img-spot-emoji">🏔️</div><div class="img-spot-cap">Winter Trip - Manali Dec '25</div><div class="img-spot-tag">Trip</div></div>
+    <div class="img-spot img-spot-2"><div class="img-spot-emoji">🎪</div><div class="img-spot-cap">Fest Season Nov–Dec</div><div class="img-spot-tag">Fests</div></div>
+    <div class="img-spot img-spot-3"><div class="img-spot-emoji">💼</div><div class="img-spot-cap">Placement Drive '26 - prep starts now</div><div class="img-spot-tag">Careers</div></div>
+    <div class="img-spot img-spot-4"><div class="img-spot-emoji">🏆</div><div class="img-spot-cap">Case Comp Season · SRCC · Hindu · LSR</div><div class="img-spot-tag">Compete</div></div>
   </div>
 
-  <!-- Scrollable screen -->
-  <div class="screen" id="screen">
+  <div class="float-cards">
+    <div class="fc fc-1"><div class="fc-icon">🎪</div><div class="fc-text"><div class="fc-title">Fest Season is here 🔥</div><div class="fc-sub">Zeitgeist · Mecca · Antaragni · and 20+ more</div></div></div>
+    <div class="fc fc-2"><div class="fc-icon">💼</div><div class="fc-text"><div class="fc-title">Placement Season '26</div><div class="fc-sub">Mock interviews, CV reviews &amp; referrals on Unrest</div></div></div>
+    <div class="fc fc-3"><div class="fc-icon">🏔️</div><div class="fc-text"><div class="fc-title">Winter Trip - Manali</div><div class="fc-sub">Dec 22–27 · 38 students joining · ₹4,200/head</div></div></div>
+    <div class="fc fc-4"><div class="fc-icon">⚽</div><div class="fc-text"><div class="fc-title">Turf Sunday @ JNU Ground</div><div class="fc-sub">5-a-side · 7am · 12 spots left · Join now</div></div></div>
+    <div class="fc fc-5"><div class="fc-icon">📝</div><div class="fc-text"><div class="fc-title">End-Sem Prep Mode</div><div class="fc-sub">Notes, PYQs &amp; study groups - all on Unrest</div></div></div>
+    <div class="fc fc-6"><div class="fc-icon">🏃</div><div class="fc-text"><div class="fc-title">DU Bhaag Club · 6am Run</div><div class="fc-sub">Lodhi Garden · Saturday · 34 runners joining</div></div></div>
+  </div>
 
-    <!-- Header -->
-    <div class="header">
-      <div class="logo-ring">
-        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="14" r="10" stroke="rgba(56,152,210,0.5)" stroke-width="1"/>
-          <circle cx="14" cy="14" r="5" stroke="rgba(56,152,210,0.85)" stroke-width="1.2"/>
-          <line x1="14" y1="4" x2="14" y2="24" stroke="rgba(56,152,210,0.35)" stroke-width="0.8"/>
-          <line x1="4" y1="14" x2="24" y2="14" stroke="rgba(56,152,210,0.35)" stroke-width="0.8"/>
-          <line x1="7" y1="7" x2="21" y2="21" stroke="rgba(56,152,210,0.2)" stroke-width="0.8"/>
-          <line x1="21" y1="7" x2="7" y2="21" stroke="rgba(56,152,210,0.2)" stroke-width="0.8"/>
-          <circle cx="14" cy="14" r="1.5" fill="rgba(56,152,210,0.9)"/>
-        </svg>
+  <div class="stat-badge stat-1"><div class="sb-num">90+</div><div class="sb-label">DU Colleges</div></div>
+  <div class="stat-badge blue stat-2"><div class="sb-num">Free</div><div class="sb-label">Forever for students</div></div>
+  <div class="stat-badge green stat-3"><div class="sb-num" id="hero-live-count">247</div><div class="sb-label">On the waitlist</div></div>
+
+  <div class="promo-strip"><div class="promo-dot"></div><div class="promo-text">⚽ <strong>Turf Sunday</strong> · 🏃 DU Bhaag Club · 🎪 Fest season · 💼 Placement prep</div></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">Now accepting early access</div>
+    <h1>Delhi University's<br><em>campus network</em><br>finally <span class="under">exists</span></h1>
+    <p class="hero-sub">A verified social network, marketplace, and community hub - built exclusively for DU students. Your college identity, your people, your store.</p>
+    <div class="hero-form" id="hero-form">
+      <input type="email" placeholder="Enter your DU email" id="hero-email">
+      <button onclick="joinWaitlist('hero')">Get early access</button>
+    </div>
+    <div class="success-msg" id="hero-success">🎉 You're on the list! We'll be in touch.</div>
+    <p class="hero-note">Free forever for students · No spam · Launch 11 June 2026</p>
+    <div class="hero-colleges">
+      <span>Launching at →</span>
+      <div class="college-pill">SRCC</div>
+      <div class="college-pill">Miranda House</div>
+      <div class="college-pill">Hindu College</div>
+      <div class="college-pill">St. Stephen's</div>
+      <div class="college-pill">LSR</div>
+      <div class="college-pill">+ 85 more</div>
+    </div>
+  </div>
+</section>
+
+<div class="countdown-section" id="countdown">
+  <div class="countdown-inner">
+    <div class="countdown-eyebrow">🚀 Launch countdown</div>
+    <h2 class="countdown-title">Unrest goes live on <em>11 June 2026</em></h2>
+    <p class="countdown-sub">Founding members get early access, free merch, and a verified badge. Claim your spot.</p>
+    <div class="countdown-grid">
+      <div class="cd-unit">
+        <div class="cd-accent"></div>
+        <div class="cd-num" id="cd-days">--</div>
+        <div class="cd-label">Days</div>
       </div>
-      <div class="eyebrow">Vedic Astrology Consultation</div>
-      <div class="brand-name">Astro Arun Pandit</div>
-      <div class="header-rule"><span class="rule-mark">◆</span></div>
-      <div class="header-sub">Share your concerns first, at your own pace. Your details come later.</div>
+      <div class="cd-unit">
+        <div class="cd-num" id="cd-hours">--</div>
+        <div class="cd-label">Hours</div>
+      </div>
+      <div class="cd-unit">
+        <div class="cd-num" id="cd-mins">--</div>
+        <div class="cd-label">Minutes</div>
+      </div>
+      <div class="cd-unit">
+        <div class="cd-num" id="cd-secs">--</div>
+        <div class="cd-label">Seconds</div>
+      </div>
     </div>
-
-    <!-- Flow -->
-    <div class="flow-wrap">
-      <div class="flow-strip" id="flow-strip"></div>
+    <div style="margin-top:2.5rem">
+      <div class="launch-bar"><div class="launch-bar-fill" id="launch-fill" style="width:0%"></div></div>
+      <div class="launch-bar-label" id="launch-pct">Calculating progress...</div>
     </div>
-
-    <!-- Step content -->
-    <div id="step-content"></div>
-
   </div>
-
-  <!-- Fixed CTA bar -->
-  <div class="cta-bar" id="cta-bar"></div>
-
 </div>
 
+<div class="ticker-section">
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span class="ticker-item hi">SRCC</span><span class="ticker-dot"></span><span class="ticker-item">Miranda House</span><span class="ticker-dot"></span><span class="ticker-item hi">Hindu College</span><span class="ticker-dot"></span><span class="ticker-item">St. Stephen's</span><span class="ticker-dot"></span><span class="ticker-item hi">Lady Sri Ram</span><span class="ticker-dot"></span><span class="ticker-item">Dyal Singh</span><span class="ticker-dot"></span><span class="ticker-item">Hansraj</span><span class="ticker-dot"></span><span class="ticker-item hi">Kirori Mal</span><span class="ticker-dot"></span><span class="ticker-item">Ramjas</span><span class="ticker-dot"></span><span class="ticker-item hi">Gargi</span><span class="ticker-dot"></span><span class="ticker-item">IP College</span><span class="ticker-dot"></span><span class="ticker-item">Venky</span><span class="ticker-dot"></span><span class="ticker-item hi">SRCC</span><span class="ticker-dot"></span><span class="ticker-item">Miranda House</span><span class="ticker-dot"></span><span class="ticker-item hi">Hindu College</span><span class="ticker-dot"></span><span class="ticker-item">St. Stephen's</span><span class="ticker-dot"></span><span class="ticker-item hi">Lady Sri Ram</span><span class="ticker-dot"></span><span class="ticker-item">Dyal Singh</span><span class="ticker-dot"></span><span class="ticker-item">Hansraj</span><span class="ticker-dot"></span><span class="ticker-item hi">Kirori Mal</span>
+    </div>
+    <div class="ticker-track ticker-track2" aria-hidden="true">
+      <span class="ticker-item hi">SRCC</span><span class="ticker-dot"></span><span class="ticker-item">Miranda House</span><span class="ticker-dot"></span><span class="ticker-item hi">Hindu College</span><span class="ticker-dot"></span><span class="ticker-item">St. Stephen's</span><span class="ticker-dot"></span><span class="ticker-item hi">Lady Sri Ram</span><span class="ticker-dot"></span><span class="ticker-item">Dyal Singh</span><span class="ticker-dot"></span><span class="ticker-item">Hansraj</span><span class="ticker-dot"></span><span class="ticker-item hi">Kirori Mal</span><span class="ticker-dot"></span><span class="ticker-item">Ramjas</span><span class="ticker-dot"></span><span class="ticker-item hi">Gargi</span><span class="ticker-dot"></span><span class="ticker-item">IP College</span><span class="ticker-dot"></span><span class="ticker-item">Venky</span><span class="ticker-dot"></span><span class="ticker-item hi">SRCC</span><span class="ticker-dot"></span><span class="ticker-item">Miranda House</span><span class="ticker-dot"></span><span class="ticker-item hi">Hindu College</span><span class="ticker-dot"></span><span class="ticker-item">St. Stephen's</span><span class="ticker-dot"></span><span class="ticker-item hi">Lady Sri Ram</span><span class="ticker-dot"></span><span class="ticker-item">Dyal Singh</span><span class="ticker-dot"></span><span class="ticker-item">Hansraj</span><span class="ticker-dot"></span><span class="ticker-item hi">Kirori Mal</span>
+    </div>
+  </div>
+</div>
+
+<div class="pulse-section">
+  <div class="pulse-inner">
+    <div class="pulse-left">
+      <div class="pulse-label">🔴 Live signups</div>
+      <div class="pulse-num"><span id="pulse-count">247</span></div>
+      <div class="pulse-sub">students on the waitlist</div>
+    </div>
+    <div class="pulse-feed" id="pulse-feed"></div>
+    <div class="pulse-bar-wrap">
+      <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px">Top colleges</div>
+      <div class="pulse-college-bars" id="pcb-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<section class="rollcall-section" id="rollcall">
+  <div class="rollcall-inner">
+    <div class="rollcall-head">
+      <div class="section-label">College roll call</div>
+      <h2>Is your college <em>in?</em></h2>
+      <p>Click your college tile to mark your attendance. Show the Unrest team which colleges want it most.</p>
+      <div class="rollcall-counter">
+        <span>🏫</span>
+        <span id="colleges-claimed">0</span> colleges represented
+        <span>·</span>
+        <span id="total-marked">0</span> students marked present
+      </div>
+    </div>
+    <div class="college-grid" id="college-grid"></div>
+    <p class="rollcall-cta">Don't see your college? <strong>DM us @Unrest.in</strong> - we'll add it in 24 hours.</p>
+  </div>
+</section>
+
+<div class="preview" id="store">
+  <div class="phone-frame">
+    <div class="phone-screen">
+      <div class="phone-status"><span>9:41</span><span>●●● 100%</span></div>
+      <div class="phone-nav"><div class="phone-nav-logo">Un<span>rest</span></div><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#7a776e" stroke-width="1.5"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
+      <div class="phone-tabs"><div class="phone-tab active">Feed</div><div class="phone-tab">Store</div><div class="phone-tab">Explore</div></div>
+      <div class="feed">
+        <div class="post">
+          <div class="post-head"><div class="avatar" style="background:#c84b2f">RK</div><div class="post-meta"><div class="post-name">Riya Kapoor</div><div class="post-college">SRCC · 2nd year</div></div><div class="post-badge" style="background:#fef0ec;color:#c84b2f">SRCC</div></div>
+          <div class="post-img" style="background:#fef0ec;font-family:'Instrument Serif',serif;font-size:0.8rem;color:#c84b2f;padding:8px;text-align:center;flex-direction:column;display:flex;justify-content:center;"><div style="font-size:1.8rem;margin-bottom:4px;">🎓</div><div>Economics fest '25 - registrations open!</div></div>
+          <div class="post-body">EconFest this Friday at SRCC auditorium. Case comps, guest lectures, networking. Free for DU students 🔥</div>
+          <div class="post-actions"><span class="post-act">❤ 142</span><span class="post-act">💬 28</span><span class="post-act">↗ Share</span></div>
+        </div>
+        <div class="post">
+          <div class="post-head"><div class="avatar" style="background:#1e4f8c">AS</div><div class="post-meta"><div class="post-name">Aryan Singh</div><div class="post-college">Hindu College · 3rd year</div></div><div class="post-badge" style="background:#e8f0fb;color:#1e4f8c">Hindu</div></div>
+          <div class="post-body">Anyone selling their Macroeconomics notes from last sem? DM me 🙏 #Hindu #Economics</div>
+          <div class="post-actions"><span class="post-act">❤ 34</span><span class="post-act">💬 12</span><span class="post-act">↗ Share</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phone-frame2">
+    <div class="phone-screen2">
+      <div class="phone-status"><span>9:41</span><span>●●● 100%</span></div>
+      <div class="sports-nav">
+        <div class="sports-logo">Un<span>rest</span></div>
+        <div class="sports-pill">Sports Live</div>
+      </div>
+      <div class="sports-tabs">
+        <div class="sports-tab active">Turf & Run</div>
+        <div class="sports-tab">Clubs</div>
+        <div class="sports-tab">Results</div>
+      </div>
+      <div class="sports-feed">
+        <div class="sport-header">
+          <div class="sport-header-title">Happening this weekend</div>
+        </div>
+
+        <div class="sport-card orange">
+          <div class="sc-top">
+            <div class="sc-icon">⚽</div>
+            <div class="sc-title">Turf Sunday — 5-a-side Football</div>
+            <div class="sc-badge">Today</div>
+          </div>
+          <div class="sc-body">JNU Ground · 7:00 AM · ₹80/head · 12 spots left. Bring your own boots, water provided.</div>
+          <div class="sc-footer">
+            <div class="sc-meta">📍 JNU North Gate · 23 joined</div>
+            <div class="sc-join">Join →</div>
+          </div>
+        </div>
+
+        <div class="sport-card green">
+          <div class="sc-top">
+            <div class="sc-icon">🏃</div>
+            <div class="sc-title">DU Bhaag Club — Morning Run</div>
+            <div class="sc-badge">Sat 6am</div>
+          </div>
+          <div class="sc-body">Lodhi Garden loop, ~6km. All paces welcome. Post-run chai at the stalls after!</div>
+          <div class="sc-footer">
+            <div class="sc-meta">🏃 34 runners · Mixed colleges</div>
+            <div class="sc-join">Join →</div>
+          </div>
+        </div>
+
+        <div class="sport-card blue">
+          <div class="sc-top">
+            <div class="sc-icon">🏸</div>
+            <div class="sc-title">Badminton Doubles — Hindu College</div>
+            <div class="sc-badge">Sun 8am</div>
+          </div>
+          <div class="sc-body">Hindu Sports Complex · Find a partner or come solo, we'll pair you up. Rackets available.</div>
+          <div class="sc-footer">
+            <div class="sc-meta">🏸 8 pairs registered</div>
+            <div class="sc-join">Join →</div>
+          </div>
+        </div>
+
+        <div class="sport-card yellow">
+          <div class="sc-top">
+            <div class="sc-icon">🏏</div>
+            <div class="sc-title">DU Cricket League — Week 4</div>
+            <div class="sc-badge">Ongoing</div>
+          </div>
+          <div class="sc-body">SRCC vs Hansraj · University Ground · Score updates live on Unrest feed.</div>
+          <div class="sc-footer">
+            <div class="sc-meta">🏆 SRCC leads 3-1</div>
+            <div class="sc-join">Watch →</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="features" id="features">
+  <div class="features-inner">
+    <div class="features-head">
+      <div class="section-label">Everything you need</div>
+      <h2>Built for <em>DU life</em></h2>
+      <p>From your morning lecture to the fest after-party - one app covers it all.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card"><div class="feat-icon" style="background:#fef0ec">🎓</div><div class="feat-title">Verified student identity</div><div class="feat-desc">Sign up with your DU college email. Get a verified college badge. Only real DU students, no outsiders.</div><span class="feat-tag" style="background:#fef0ec;color:#c84b2f">Core</span></div>
+      <div class="feature-card"><div class="feat-icon" style="background:#eef4fd">📱</div><div class="feat-title">College-gated feed</div><div class="feat-desc">See posts from your college, your department, and all-DU. Filter by year, topic, or college.</div><span class="feat-tag" style="background:#eef4fd;color:#1e4f8c">Social</span></div>
+      <div class="feature-card"><div class="feat-icon" style="background:#f0f9f4">⚽</div><div class="feat-title">Sports & activities hub</div><div class="feat-desc">Find turf games, running clubs, sports leagues, and pickup matches near campus. Never miss a Bhaag Club run.</div><span class="feat-tag" style="background:#f0f9f4;color:#2a6b4a">Sports</span></div>
+      <div class="feature-card"><div class="feat-icon" style="background:#fdf8ec">📅</div><div class="feat-title">Events & fests hub</div><div class="feat-desc">Never miss a fest, audition, or society recruitment again. DU's event calendar, all in one place.</div><span class="feat-tag" style="background:#fdf8ec;color:#8a5c0a">Coming soon</span></div>
+      <div class="feature-card"><div class="feat-icon" style="background:#fef0ec">💼</div><div class="feat-title">Internships & jobs</div><div class="feat-desc">Seniors refer juniors. Companies post DU-specific opportunities. LinkedIn but actually for students.</div><span class="feat-tag" style="background:#fef0ec;color:#c84b2f">Coming soon</span></div>
+      <div class="feature-card"><div class="feat-icon" style="background:#eef4fd">🔒</div><div class="feat-title">Safe & private</div><div class="feat-desc">No random strangers. Report & block built in. Community moderators at every college. Your data stays yours.</div><span class="feat-tag" style="background:#eef4fd;color:#1e4f8c">Core</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="how">
+    <div class="how-head"><div class="section-label">How it works</div><h2>Simple as <em>semester 1</em></h2></div>
+    <div class="steps">
+      <div class="step"><div class="step-num">01</div><div class="step-content"><div class="step-title">Sign up with your college email</div><div class="step-desc">Use your official DU college email to verify your identity. You get a verified badge for your college - SRCC, Miranda, Hindu, whoever. No outsiders allowed.</div></div></div>
+      <div class="step"><div class="step-num">02</div><div class="step-content"><div class="step-title">Build your campus profile</div><div class="step-desc">Set your college, year, department, and interests. Follow people from your college and across DU. Your profile is your DU identity - more real than LinkedIn.</div></div></div>
+      <div class="step"><div class="step-num">03</div><div class="step-content"><div class="step-title">Post, discover, and connect</div><div class="step-desc">Share campus moments, ask questions, post opportunities. See what's happening at every DU college in real time. Join sports events, running clubs, and turf games right from the app.</div></div></div>
+      <div class="step"><div class="step-num">04</div><div class="step-content"><div class="step-title">Shop the campus store</div><div class="step-desc">Buy your college merch - tees, hoodies, notebooks with your college name. Sell old books and gear to fellow students. Commerce that actually makes sense for campus life.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="echo-section" id="echo" style="display: none;">
+  <div class="echo-wall-bg"></div>
+  <div class="echo-inner">
+    <div class="echo-head">
+      <div class="section-label">Roll Call</div>
+      <h2>Echo your <em>voice</em></h2>
+      <p>Echo your thoughts about a platform that connects all DU colleges. The best echoes climb to the top.</p>
+    </div>
+    <div id="echo-unlocked">
+      <div class="echo-form-wrap">
+        <div class="echo-form-row">
+          <input class="echo-input echo-input-small" id="echo-name" type="text" placeholder="First Name" maxlength="15">
+          <select class="echo-select echo-input-small" id="echo-year">
+            <option value="" disabled selected>Year</option>
+            <option>1st yr</option>
+            <option>2nd yr</option>
+            <option>3rd yr</option>
+            <option>4th yr</option>
+            <option>Alumni</option>
+          </select>
+          <select class="echo-select" id="echo-college">
+            <option value="" disabled selected>Pick your college</option>
+            <option>SRCC</option>
+            <option>Miranda House</option>
+            <option>Hindu College</option>
+            <option>St. Stephen's</option>
+            <option>Lady Sri Ram</option>
+            <option>Hansraj College</option>
+            <option>Kirori Mal</option>
+            <option>Ramjas College</option>
+            <option>Gargi College</option>
+            <option>Venky</option>
+            <option>Other DU College</option>
+          </select>
+        </div>
+        <div class="echo-form-row" style="margin-top: 0.6rem;">
+          <input class="echo-input echo-input-large" id="echo-text" type="text" placeholder="We've been waiting for this since first year... " maxlength="120">
+          <button class="echo-submit" onclick="submitEcho()">Post echo →</button>
+        </div>
+        <div style="display:flex; justify-content: flex-end; margin-top:4px;">
+          <span class="echo-char" id="echo-char">120</span>
+        </div>
+        <div class="echo-pending-msg" id="echo-pending-msg">
+          ⏳ Your echo has been sent to moderators for review. It will appear on the wall soon!
+        </div>
+        
+        <div id="admin-panel" style="display:none; margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="font-family: var(--serif); color: var(--accent); margin:0;">Admin Mod Queue</h3>
+            <span style="font-size: 0.8rem; background: var(--accent); color: white; padding: 2px 8px; border-radius: 100px;" id="mod-count">0 Pending</span>
+          </div>
+          <div id="mod-items-container" style="display: flex; flex-direction: column; gap: 8px;"></div>
+        </div>
+
+      </div>
+      
+      <div class="echo-wall" id="echo-wall"></div>
+    </div>
+  </div>
+</section>
+
+<section class="waitlist" id="waitlist">
+  <div class="section-label" style="color:var(--accent2);justify-content:center"><span style="background:var(--accent2);height:1.5px;width:20px;display:inline-block"></span>Early access</div>
+  <h2>Be the <em>first</em> at your college</h2>
+  <p>Join the waitlist. We're launching college by college - and the first 20 students at each college get first-member status and free merch.</p>
+  <div class="waitlist-form" id="waitlist-form">
+    <input type="email" placeholder="your@college.du.ac.in" id="waitlist-email">
+    <button onclick="joinWaitlist('waitlist')">Secure my spot</button>
+  </div>
+  <div class="success-msg" id="waitlist-success" style="background:rgba(42,107,74,0.2);border-color:rgba(42,107,74,0.4)">🎉 You're on the list! Check your email.</div>
+  <p style="font-size: 0.75rem; color: rgba(245,242,235,0.3); margin-top: 1rem;">Free for students · Launching 11 June 2026 · No spam ever</p>
+  <div class="waitlist-count">
+    <div class="count-avatars">
+      <div class="count-av" style="background:#c84b2f">RK</div>
+      <div class="count-av" style="background:#1e4f8c">AS</div>
+      <div class="count-av" style="background:#2a6b4a">PM</div>
+      <div class="count-av" style="background:#8a5c0a">ND</div>
+    </div>
+    <span id="count-text">247 students already joined</span>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-logo">Un<span>rest</span></div>
+  <p>© 2026 Unrest · Built by a DU student, for DU students</p>
+  <nav style="display:flex;gap:1.5rem">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="mailto:hello@Unrest.in">Contact</a>
+    <a onclick="document.getElementById('admin-modal').style.display='flex'">Admin Login</a>
+  </nav>
+</footer>
+
+<div class="admin-modal" id="admin-modal">
+  <div class="admin-close" onclick="document.getElementById('admin-modal').style.display='none'">✕</div>
+  <div class="admin-box">
+    <h3>Admin Login</h3>
+    <input type="email" id="admin-email" class="admin-input" placeholder="Admin Email">
+    <input type="password" id="admin-pass" class="admin-input" placeholder="Password">
+    <button class="admin-btn" onclick="adminLogin()">Login to Moderate</button>
+  </div>
+</div>
+
+<div class="confetti-container" id="confetti-container"></div>
+
+<script type="module">
+  // 1. IMPORT FIREBASE 
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, where, onSnapshot, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  // 2. PASTE YOUR CONFIG HERE
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "unrest-du.firebaseapp.com",
+    projectId: "unrest-du",
+    storageBucket: "unrest-du.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  // 3. EXPOSE GLOBALS
+  window.db = db; window.auth = auth;
+  window.signInWithEmailAndPassword = signInWithEmailAndPassword; 
+  window.collection = collection; window.addDoc = addDoc; 
+  window.query = query; window.where = where; window.onSnapshot = onSnapshot;
+  window.updateDoc = updateDoc; window.doc = doc; window.deleteDoc = deleteDoc;
+
+  // 4. LOAD APPROVED ECHOES (Anyone can read)
+  const q = query(collection(db, "echoes"), where("status", "==", "approved"));
+  onSnapshot(q, (snapshot) => {
+    window.liveEchoes = [];
+    snapshot.forEach((doc) => {
+      const data = doc.data(); data.id = doc.id;
+      window.liveEchoes.push(data);
+    });
+    if(window.renderEchoWall) window.renderEchoWall();
+  });
+</script>
+
 <script>
-// ── Clock ──────────────────────────────────────────────────────────────────────
-function tick(){
-  const n=new Date();
-  document.getElementById('clock').textContent=
-    n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');
+// --- YOUR EXISTING UI DATA & VARIABLES ---
+const COLLEGES = [
+  { id:'srcc', name:'SRCC', full:'Shri Ram College of Commerce', emoji:'🏛️', color:'#c84b2f', seed:58 },
+  { id:'miranda', name:'Miranda House', full:'Miranda House', emoji:'🌸', color:'#9c27b0', seed:47 },
+  { id:'hindu', name:'Hindu College', full:'Hindu College', emoji:'🎓', color:'#1e4f8c', seed:43 },
+  { id:'stephens', name:"St. Stephen's", full:"St. Stephen's College", emoji:'⛪', color:'#5d4037', seed:38 },
+  { id:'lsr', name:'LSR', full:'Lady Shri Ram College', emoji:'💜', color:'#7b1fa2', seed:35 },
+  { id:'hansraj', name:'Hansraj', full:'Hansraj College', emoji:'🔬', color:'#0097a7', seed:29 },
+  { id:'kirorimal', name:'Kirori Mal', full:'Kirori Mal College', emoji:'🏗️', color:'#e65100', seed:26 },
+  { id:'ramjas', name:'Ramjas', full:'Ramjas College', emoji:'📚', color:'#2e7d32', seed:22 },
+  { id:'gargi', name:'Gargi', full:'Gargi College', emoji:'🌺', color:'#c2185b', seed:19 },
+  { id:'venky', name:'Venky', full:'Venkateswara College', emoji:'🦅', color:'#6d4c41', seed:12 },
+  { id:'Other DU College', name:'Other DU College', full:'Other DU College', emoji:'🏫', color:'#455a64', seed:0 }
+];
+const COLLEGE_COLORS = {};
+COLLEGES.forEach(c => COLLEGE_COLORS[c.name] = c.color);
+COLLEGE_COLORS['Lady Sri Ram'] = '#7b1fa2';
+
+let collegeCounts = {};
+let claimedColleges = new Set();
+let waitlistCount = 247;
+let hasUnlockedWall = false;
+window.liveEchoes = [];
+window.isAdmin = false;
+
+COLLEGES.forEach(c => { collegeCounts[c.id] = c.seed; });
+
+// --- UTILS ---
+function formatUsername(name) { return name ? '@' + name.trim().toLowerCase().replace(/\s+/g, '') : '@anonymous'; }
+function scrollToEchoWall() {
+  const echoSec = document.getElementById('echo');
+  if (echoSec.style.display === 'none') { alert('Join the waitlist to unlock the Echo Wall!'); document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' }); } 
+  else { echoSec.scrollIntoView({ behavior: 'smooth' }); }
 }
-tick(); setInterval(tick,30000);
 
-// ── Stars (soft blue dots) ─────────────────────────────────────────────────────
-(function(){
-  const c=document.getElementById('stars');
-  for(let i=0;i<55;i++){
-    const s=document.createElement('div'); s.className='star';
-    const sz=Math.random()*1.5+0.4;
-    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;
-      width:${sz}px;height:${sz}px;
-      --d:${2.5+Math.random()*4}s;--delay:${Math.random()*5}s;
-      --lo:${0.04+Math.random()*0.08};--hi:${0.2+Math.random()*0.25};`;
-    c.appendChild(s);
+// --- ADMIN LOGIN & MODERATION ---
+async function adminLogin() {
+  const email = document.getElementById('admin-email').value;
+  const pass = document.getElementById('admin-pass').value;
+  
+  try {
+    await window.signInWithEmailAndPassword(window.auth, email, pass);
+    document.getElementById('admin-modal').style.display = 'none';
+    window.isAdmin = true;
+    
+    // Unlock wall to show Mod panel
+    document.getElementById('echo').style.display = 'block';
+    document.getElementById('admin-panel').style.display = 'block';
+    alert("Admin logged in successfully.");
+    
+    // Listen for pending echoes
+    const qPending = window.query(window.collection(window.db, "echoes"), window.where("status", "==", "pending"));
+    window.onSnapshot(qPending, (snapshot) => {
+      let pendingHtml = "";
+      let count = 0;
+      snapshot.forEach((doc) => {
+        count++;
+        const p = doc.data();
+        pendingHtml += `
+          <div class="mod-item">
+            <div class="mod-info">
+              <div class="mod-info-college">${formatUsername(p.name)} - ${p.year} - ${p.college}</div>
+              <div class="mod-info-text">"${p.text}"</div>
+            </div>
+            <div class="mod-actions">
+              <button class="btn-approve" onclick="approveEcho('${doc.id}')">Approve</button>
+              <button class="btn-reject" onclick="rejectEcho('${doc.id}')">Reject</button>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('mod-count').textContent = `${count} Pending`;
+      document.getElementById('mod-items-container').innerHTML = pendingHtml || '<div style="font-size:0.8rem;color:#888;">Queue is empty.</div>';
+    });
+
+  } catch (error) {
+    alert("Login failed: " + error.message);
   }
-})();
+}
 
-// ── Data ───────────────────────────────────────────────────────────────────────
-const CATS = [
-  { id:'love',      name:'Love & Relationships', hint:'Compatibility, heartbreak, finding a partner',
-    svg:'<path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z" stroke-width="1.2"/>' },
-  { id:'marriage',  name:'Marriage',             hint:'Timing, kundli match, delays, dosha',
-    svg:'<circle cx="8" cy="8" r="4" stroke-width="1.2"/><circle cx="20" cy="8" r="4" stroke-width="1.2"/><path d="M4 20c0-3.314 2.686-6 6-6h8c3.314 0 6 2.686 6 6" stroke-width="1.2"/>' },
-  { id:'career',    name:'Career & Work',        hint:'Job change, business, growth, stagnation',
-    svg:'<rect x="2" y="7" width="20" height="14" rx="2" stroke-width="1.2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke-width="1.2"/><line x1="12" y1="12" x2="12" y2="16" stroke-width="1.2"/><line x1="10" y1="14" x2="14" y2="14" stroke-width="1.2"/>' },
-  { id:'finance',   name:'Finance & Wealth',     hint:'Debt, investments, losses, money flow',
-    svg:'<line x1="12" y1="2" x2="12" y2="22" stroke-width="1.2"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke-width="1.2"/>' },
-  { id:'family',    name:'Family & Home',        hint:'Parents, in-laws, siblings, disputes',
-    svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke-width="1.2"/><polyline points="9 22 9 12 15 12 15 22" stroke-width="1.2"/>' },
-  { id:'health',    name:'Health & Wellbeing',   hint:'Chronic illness, mental health, recovery',
-    svg:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-width="1.2"/>' },
-  { id:'education', name:'Education',            hint:'Exams, abroad studies, stream selection',
-    svg:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke-width="1.2"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke-width="1.2"/>' },
-  { id:'spiritual', name:'Spiritual & Karma',    hint:'Life purpose, past life, dharma, remedies',
-    svg:'<circle cx="12" cy="12" r="10" stroke-width="1.2"/><line x1="2" y1="12" x2="22" y2="12" stroke-width="1.2"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke-width="1.2"/>' },
-  { id:'property',  name:'Property & Vastu',     hint:'Buying, selling, home harmony, disputes',
-    svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke-width="1.2"/><rect x="9" y="13" width="6" height="8" stroke-width="1.2"/>' },
-  { id:'children',  name:'Children',             hint:'Childbirth timing, child health, education',
-    svg:'<circle cx="12" cy="8" r="4" stroke-width="1.2"/><path d="M8 21v-2a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4v2" stroke-width="1.2"/>' },
-  { id:'legal',     name:'Legal & Disputes',     hint:'Court cases, settlements, property conflicts',
-    svg:'<path d="M12 22V12"/><path d="M20 12H4"/><path d="m17 7-5-5-5 5"/><path d="m15 17 3 3 3-3"/><path d="m3 17 3 3 3-3"/>' },
-  { id:'foreign',   name:'Foreign & Travel',     hint:'Visa, settlement abroad, relocation',
-    svg:'<circle cx="12" cy="12" r="10" stroke-width="1.2"/><line x1="2" y1="12" x2="22" y2="12" stroke-width="1.2"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke-width="1.2"/>' },
-];
+window.approveEcho = async function(id) {
+  try { await window.updateDoc(window.doc(window.db, "echoes", id), { status: 'approved' }); } 
+  catch(e) { console.error(e); alert("Failed to approve."); }
+}
 
-const SUBS = {
-  love:      ['Finding a partner','Breakup / separation','Compatibility','Long-distance relationship','Trust issues','Family disapproval'],
-  marriage:  ['Marriage timing','Kundli matching','Love marriage hurdles','Arranged marriage search','Manglik / dosha','Repeated delays'],
-  career:    ['Stuck in career','Job change','Business growth','Promotions stagnating','Starting a venture','Workplace conflict'],
-  finance:   ['Debt & losses','Investment timing','Wealth accumulation','Business finances','Property purchase','Sudden financial loss'],
-  family:    ['Conflict at home','Parent-child tension','In-law issues','Sibling disputes','Property disagreements','Family harmony'],
-  health:    ['Chronic illness','Mental wellbeing','Surgery timing','Recovery guidance','Ancestral health karma'],
-  education: ['Exam performance','Higher studies abroad','Course selection','Focus & concentration','Competitive exams'],
-  spiritual: ['Life purpose','Karma & past life','Recurring patterns','Mantra & remedy guidance','Spiritual path'],
-  property:  ['Buying / selling timing','Vastu correction','Inheritance','Rental issues'],
-  children:  ['Childbirth timing','Child health','Child education'],
-  legal:     ['Court case outcome','Land disputes','Settlement'],
-  foreign:   ['Visa / immigration','Settlement abroad','Foreign job','Relocation timing'],
+window.rejectEcho = async function(id) {
+  try { await window.deleteDoc(window.doc(window.db, "echoes", id)); } 
+  catch(e) { console.error(e); alert("Failed to reject."); }
+}
+
+// --- WAITLIST JOIN (DUMMY MODE FOR NOW, DB SAVING SOON) ---
+function joinWaitlist(source) {
+  const emailEl = document.getElementById(source === 'hero' ? 'hero-email' : 'waitlist-email');
+  const email = emailEl.value.trim();
+  
+  if (!email || !email.includes('@')) {
+    emailEl.style.outline = '2px solid #c84b2f';
+    setTimeout(() => emailEl.style.outline = '', 2000);
+    return;
+  }
+
+  // To truly lock to DU students using just email/password auth (since we dropped Google Auth), 
+  // you would verify the string here before saving to DB.
+  if (!email.endsWith('.du.ac.in') && !window.isAdmin) {
+      alert("Access Denied: Unrest is exclusively for verified Delhi University students. Please enter your official @college.du.ac.in email address.");
+      return;
+  }
+
+  // Since we don't have the user Auth token, we write anonymously via an unlocked waitlist rule
+  // Make sure your waitlist rule allows open creation if you do this!
+  try {
+    window.addDoc(window.collection(window.db, "waitlist"), {
+        email: email,
+        timestamp: new Date().toISOString()
+    });
+  } catch(e) { console.log(e); }
+
+  document.getElementById(source === 'hero' ? 'hero-form' : 'waitlist-form').style.display = 'none';
+  document.getElementById(source === 'hero' ? 'hero-success' : 'waitlist-success').style.display = 'block';
+
+  waitlistCount++;
+  document.getElementById('pulse-count').textContent = waitlistCount;
+  document.getElementById('hero-live-count').textContent = waitlistCount;
+  spawnConfetti('#2a6b4a');
+
+  if (!hasUnlockedWall) {
+    hasUnlockedWall = true;
+    const echoSec = document.getElementById('echo');
+    echoSec.style.display = 'block';
+    setTimeout(() => echoSec.scrollIntoView({ behavior: 'smooth' }), 500);
+  }
+}
+
+// --- SECURE ECHO SUBMISSION ---
+async function submitEcho() {
+  const name = document.getElementById('echo-name').value.trim() || 'Anonymous';
+  const year = document.getElementById('echo-year').value;
+  const college = document.getElementById('echo-college').value;
+  const text = document.getElementById('echo-text').value.trim();
+  
+  if (!year || !college) { alert('Pick your year and college!'); return; }
+  if (text.length < 5) { alert('Write a longer echo!'); return; }
+
+  try {
+    await window.addDoc(window.collection(window.db, "echoes"), {
+      name: name,
+      year: year,
+      college: college,
+      text: text,
+      w: 1,
+      l: 0,
+      status: window.isAdmin ? 'approved' : 'pending', // Admins bypass the queue
+      timestamp: new Date().toISOString()
+    });
+
+    document.getElementById('echo-text').value = '';
+    const msg = document.getElementById('echo-pending-msg');
+    msg.style.display = 'flex';
+    setTimeout(() => msg.style.display = 'none', 4000);
+  } catch (err) {
+    console.error(err);
+    alert("Submission failed. Ensure you are signed in.");
+  }
+}
+
+window.renderEchoWall = function() {
+  const wall = document.getElementById('echo-wall');
+  window.liveEchoes.sort((a, b) => (b.w - b.l) - (a.w - a.l));
+
+  wall.innerHTML = window.liveEchoes.map((p, i) => {
+    const color = COLLEGE_COLORS[p.college] || '#333';
+    const usernameStr = `${formatUsername(p.name)} - ${p.year || 'Student'} - ${p.college}`;
+    return `
+      <div class="white-tile" style="--tc: ${color}; animation-delay: ${i * 0.05}s">
+        <div class="wt-accent"></div>
+        <div class="wt-text">"${p.text}"</div>
+        <div class="wt-footer">
+          <div class="wt-meta"><div class="wt-college">${usernameStr}</div></div>
+          <div class="wl-actions">
+            <button class="wl-btn" onclick="voteCloud('${p.id}', 'w', this)">W <span>${p.w}</span></button>
+            <button class="wl-btn" onclick="voteCloud('${p.id}', 'l', this)">L <span>${p.l}</span></button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
 };
 
-const URGENCY = [
-  {v:1, label:'Not urgent'},
-  {v:2, label:'Mild concern'},
-  {v:3, label:'Moderate'},
-  {v:4, label:'Urgent'},
-  {v:5, label:'Very urgent'},
-];
-
-const STEPS = ['Concern','Details','Context','Your Info','Review'];
-
-const AFFIRMATIONS = [
-  { text: 'You have already taken the hardest step - reaching out for clarity takes real courage.' },
-  { text: 'Whatever you are facing, you are not alone. Panditji has guided thousands through moments just like yours.' },
-  { text: 'The stars have a language, and your chart holds answers. You are exactly where you need to be.' },
-  { text: 'This is a safe, confidential space. There is no judgement here — only guidance and understanding.' },
-];
-
-let S = {
-  step:0, categories:[], subIssues:[], urgency:null, openText:'',
-  name:'', dob:'', tob:'', pob:'', gender:'', email:'', consultType:'',
-};
-
-// ── Render ─────────────────────────────────────────────────────────────────────
-function render(){
-  renderFlow();
-  const sc = document.getElementById('screen');
-  sc.scrollTo({top:0, behavior:'smooth'});
-
-  const content = document.getElementById('step-content');
-  content.innerHTML = '';
-
-  const builders = [stepConcern, stepDetails, stepContext, stepPersonal, stepReview];
-  if(S.step < builders.length){
-    const {card, cta} = builders[S.step]();
-    content.appendChild(card);
-    document.getElementById('cta-bar').innerHTML = '';
-    document.getElementById('cta-bar').appendChild(cta);
+window.voteCloud = async function(id, type, btn) {
+  const currentVal = parseInt(btn.querySelector('span').textContent);
+  let newVal = currentVal;
+  
+  if (btn.classList.contains(type === 'w' ? 'active-w' : 'active-l')) {
+    newVal = currentVal - 1;
+    btn.classList.remove(type === 'w' ? 'active-w' : 'active-l');
   } else {
-    const {card, cta} = stepConfirmation();
-    content.appendChild(card);
-    document.getElementById('cta-bar').innerHTML = '';
-    document.getElementById('cta-bar').appendChild(cta);
+    newVal = currentVal + 1;
+    btn.classList.add(type === 'w' ? 'active-w' : 'active-l');
+  }
+  
+  try {
+     const payload = {};
+     payload[type] = newVal;
+     await window.updateDoc(window.doc(window.db, "echoes", id), payload);
+  } catch(e) { console.error("Vote failed", e); }
+};
+
+// --- COUNTDOWN ---
+const LAUNCH_DATE = new Date("June 11, 2026 00:00:00 GMT+0530").getTime();
+const CAMPAIGN_START = new Date("September 1, 2025 00:00:00 GMT+0530").getTime();
+
+function padZ(n) { return String(n).padStart(2, '0'); }
+
+let lastSecs = -1;
+function updateCountdown() {
+  const now = new Date().getTime();
+  const diff = LAUNCH_DATE - now;
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent = '00';
+    document.getElementById('cd-hours').textContent = '00';
+    document.getElementById('cd-mins').textContent = '00';
+    document.getElementById('cd-secs').textContent = '00';
+    document.getElementById('launch-pct').textContent = "🎉 We're live!";
+    document.getElementById('launch-fill').style.width = '100%';
+    return;
+  }
+  const days  = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins  = Math.floor((diff % 3600000)  / 60000);
+  const secs  = Math.floor((diff % 60000)    / 1000);
+
+  document.getElementById('cd-days').textContent = padZ(days);
+  document.getElementById('cd-hours').textContent = padZ(hours);
+  document.getElementById('cd-mins').textContent = padZ(mins);
+
+  const sEl = document.getElementById('cd-secs');
+  if (secs !== lastSecs) {
+    sEl.textContent = padZ(secs);
+    sEl.classList.remove('flip');
+    void sEl.offsetWidth;
+    sEl.classList.add('flip');
+    lastSecs = secs;
+  }
+
+  const total = LAUNCH_DATE - CAMPAIGN_START;
+  const elapsed = now - CAMPAIGN_START;
+  const pct = Math.min(100, Math.max(0, (elapsed / total) * 100));
+  document.getElementById('launch-fill').style.width = pct.toFixed(1) + '%';
+  document.getElementById('launch-pct').textContent = `${pct.toFixed(0)}% of the journey done · ${days} days to go`;
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// --- CONFETTI ---
+const CONFETTI_COLORS = ['#c84b2f','#e8a020','#2a6b4a','#1e4f8c','#9c27b0','#00838f'];
+function spawnConfetti(color) {
+  const container = document.getElementById('confetti-container');
+  for (let i = 0; i < 28; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    const x = 20 + Math.random() * 60;
+    const duration = 1.2 + Math.random() * 1.2;
+    const size = 6 + Math.random() * 8;
+    piece.style.cssText = `
+      left: ${x}vw; top: ${30 + Math.random() * 20}vh;
+      width: ${size}px; height: ${size}px;
+      background: ${Math.random() > 0.5 ? color : CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)]};
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration: ${duration}s; animation-delay: ${Math.random() * 0.3}s;
+    `;
+    container.appendChild(piece);
+    setTimeout(() => piece.remove(), (duration + 0.5) * 1000);
   }
 }
 
-function renderFlow(){
-  const el = document.getElementById('flow-strip');
-  el.innerHTML = '';
-  STEPS.forEach((lbl,i)=>{
-    const done=i<S.step, active=i===S.step;
-    const node = document.createElement('div'); node.className='flow-node';
-    node.innerHTML=`
-      <div class="flow-dot ${active?'active':done?'done':''}">${done?'✓':i+1}</div>
-      <div class="flow-lbl ${active?'active':done?'done':''}">${lbl}</div>`;
-    el.appendChild(node);
-    if(i<STEPS.length-1){
-      const line=document.createElement('div');
-      line.className=`flow-line ${i<S.step?'done':''}`;
-      el.appendChild(line);
+// --- COLLEGE GRID ---
+function renderCollegeGrid() {
+  const grid = document.getElementById('college-grid');
+  grid.innerHTML = '';
+  COLLEGES.forEach(c => {
+    const claimed = claimedColleges.has(c.id);
+    const count = collegeCounts[c.id] || 0;
+    const tile = document.createElement('div');
+    tile.className = 'college-tile' + (claimed ? ' claimed' : '');
+    tile.style.setProperty('--tile-color', c.color);
+    tile.innerHTML = `
+      <span class="tile-emoji">${c.emoji}</span>
+      <div class="tile-name">${c.name}</div>
+      <div class="tile-full">${c.full}</div>
+      <div class="tile-count"><div class="tile-count-dot"></div>${count} here</div>
+      <div class="tile-check">✓</div>
+    `;
+    tile.addEventListener('click', () => claimCollege(c.id, tile, c));
+    grid.appendChild(tile);
+  });
+  updateRollCallStats();
+}
+
+function claimCollege(id, tile, c) {
+  if (claimedColleges.has(id)) return;
+  claimedColleges.add(id);
+  collegeCounts[id] = (collegeCounts[id] || 0) + 1;
+  tile.classList.add('claimed');
+  tile.querySelector('.tile-count').innerHTML = `<div class="tile-count-dot"></div>${collegeCounts[id]} here`;
+  tile.style.setProperty('--tile-color', c.color);
+  updateRollCallStats();
+  updatePulseBar();
+  spawnConfetti(c.color);
+  addPulseItem(c);
+  waitlistCount++;
+  updateAllCounts();
+}
+
+function updateRollCallStats() {
+  const totalMarked = COLLEGES.reduce((a, c) => a + (collegeCounts[c.id] || 0), 0);
+  document.getElementById('colleges-claimed').textContent = COLLEGES.length;
+  document.getElementById('total-marked').textContent = totalMarked;
+}
+renderCollegeGrid();
+
+// --- LIVE PULSE FEED ---
+const FAKE_NAMES = [
+  ['RK','Riya K.','SRCC','#c84b2f'], ['AS','Aryan S.','Hindu College','#1e4f8c'],
+  ['PM','Priya M.','Miranda House','#9c27b0'], ['ND','Nikhil D.','Hansraj','#0097a7'],
+  ['SS','Shreya S.',"St. Stephen's",'#5d4037'], ['AK','Aditya K.','LSR','#7b1fa2'],
+  ['VT','Varun T.','Ramjas','#2e7d32'], ['NJ','Nisha J.','Gargi','#c2185b'],
+  ['RB','Raj B.','Kirori Mal','#e65100'], ['KM','Kavya M.','IP College','#00838f'],
+];
+let pulseItems = [];
+
+function addPulseItem(college) {
+  const fake = FAKE_NAMES[Math.floor(Math.random() * FAKE_NAMES.length)];
+  pulseItems.unshift({
+    initials: fake[0], name: fake[1],
+    college: college ? college.name : fake[2],
+    color: college ? college.color : fake[3],
+    time: 'just now'
+  });
+  if (pulseItems.length > 6) pulseItems.pop();
+  renderPulseFeed();
+}
+
+function renderPulseFeed() {
+  const feed = document.getElementById('pulse-feed');
+  feed.innerHTML = pulseItems.map((item, i) => `
+    <div class="pulse-item" style="animation-delay:${i*0.05}s">
+      <div class="pulse-avatar" style="background:${item.color}">${item.initials}</div>
+      <div><span class="pulse-name">${item.name}</span> from <strong>${item.college}</strong> just joined</div>
+      <div class="pulse-time">${item.time}</div>
+    </div>
+  `).join('');
+}
+
+FAKE_NAMES.slice(0, 4).forEach((n, i) => {
+  pulseItems.push({ initials: n[0], name: n[1], college: n[2], color: n[3], time: `${(i+1)*3}m ago` });
+});
+renderPulseFeed();
+
+function simulateTrickle() {
+  setTimeout(() => {
+    waitlistCount++;
+    updateAllCounts();
+    const fake = FAKE_NAMES[Math.floor(Math.random() * FAKE_NAMES.length)];
+    pulseItems.unshift({ initials: fake[0], name: fake[1], college: fake[2], color: fake[3], time: 'just now' });
+    if (pulseItems.length > 6) pulseItems.pop();
+    pulseItems.forEach((item, i) => { if (i > 0) item.time = `${i * 2}m ago`; });
+    renderPulseFeed();
+    updatePulseBar();
+    simulateTrickle();
+  }, 8000 + Math.random() * 6000);
+}
+simulateTrickle();
+
+function updatePulseBar() {
+  const sorted = [...COLLEGES].sort((a,b) => (collegeCounts[b.id]||0) - (collegeCounts[a.id]||0)).slice(0,5);
+  const max = collegeCounts[sorted[0].id] || 1;
+  document.getElementById('pcb-wrap').innerHTML = sorted.map(c => `
+    <div class="pcb-row">
+      <div class="pcb-name">${c.name}</div>
+      <div class="pcb-track"><div class="pcb-fill" style="width:${(collegeCounts[c.id]/max*100).toFixed(0)}%;background:${c.color}"></div></div>
+      <div class="pcb-count">${collegeCounts[c.id]}</div>
+    </div>
+  `).join('');
+}
+updatePulseBar();
+
+function updateAllCounts() {
+  document.getElementById('pulse-count').textContent = waitlistCount;
+  document.getElementById('count-text').textContent = waitlistCount + ' students already joined';
+  document.getElementById('hero-live-count').textContent = waitlistCount;
+}
+
+// --- SCROLL REVEAL ANIMATIONS ---
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
     }
   });
-}
+}, { threshold: 0.1 });
 
-// ── Step builders ──────────────────────────────────────────────────────────────
-function stepConcern(){
-  const card = mk('card');
-  card.innerHTML = `
-    <div class="card-eyebrow">Step 1 of 5</div>
-    <div class="card-title">What brings you here?</div>
-    <div class="card-sub">Select the area you need guidance on. Your selections are private — only Panditji sees them.</div>
-    <div class="cat-grid">
-      ${CATS.map(c=>`
-        <div class="cat-tile ${S.categories.includes(c.id)?'sel':''}" data-id="${c.id}" onclick="toggleCat(this,'${c.id}')">
-          <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">${c.svg}</svg></div>
-          <div class="tile-name">${c.name}</div>
-          <div class="tile-hint">${c.hint}</div>
-        </div>`).join('')}
-    </div>
-    <div class="notice green" style="margin-bottom:4px">
-      <div class="notice-mark">▲</div>
-      <div>Completely private. Only Panditji will see what you share here.</div>
-    </div>`;
-
-  const cta = mk('div');
-  cta.innerHTML = `<div class="btn-row"><button class="btn-cta" id="cta" onclick="saveConcern()">Continue</button></div>`;
-  return {card, cta};
-}
-
-function stepDetails(){
-  const subs = [...new Set(S.categories.flatMap(id=>SUBS[id]||[]))];
-  const card = mk('card');
-  card.innerHTML = `
-    <div class="card-eyebrow">Step 2 of 5</div>
-    <div class="card-title">What specifically concerns you?</div>
-    <div class="card-sub">Select everything that applies. The more context Panditji has, the more focused your reading will be.</div>
-    <div class="chips" style="margin-bottom:22px">
-      ${subs.map(s=>`<div class="chip ${S.subIssues.includes(s)?'sel':''}" onclick="toggleChip(this,'${s.replace(/'/g,"\\'")}')">${s}</div>`).join('')}
-    </div>
-    <div class="field">
-      <label class="field-label">How pressing is this matter right now?</label>
-      <div class="urg-row">
-        ${URGENCY.map(u=>`
-          <div class="urg-btn ${S.urgency===u.v?'sel':''}" onclick="selectUrg(${u.v},this)">
-            <span class="urg-val">${u.v}</span>${u.label}
-          </div>`).join('')}
-      </div>
-    </div>
-    <div class="notice amber">
-      <div class="notice-mark">◆</div>
-      <div>Many people share the same concerns. There is no judgement here.</div>
-    </div>`;
-
-  const cta = mk('div');
-  cta.innerHTML = `<div class="btn-row"><button class="btn-back" onclick="back()">Back</button><button class="btn-cta" id="cta" onclick="saveDetails()">Continue</button></div>`;
-  return {card, cta};
-}
-
-function stepContext(){
-  const card = mk('card');
-  card.innerHTML = `
-    <div class="card-eyebrow">Step 3 of 5 — Optional</div>
-    <div class="card-title">Anything else to share?</div>
-    <div class="card-sub">In your own words, describe your situation. Panditji will read this before the call — so you don't have to repeat yourself on the day.</div>
-    <div class="field">
-      <textarea id="f-text" placeholder="Describe what's been weighing on you. Be as specific or as brief as you like.">${S.openText}</textarea>
-    </div>
-    <div class="notice green">
-      <div class="notice-mark">▲</div>
-      <div>This is only for Panditji. It helps create a more meaningful session from the very start.</div>
-    </div>`;
-
-  const cta = mk('div');
-  cta.innerHTML = `<div class="btn-row"><button class="btn-back" onclick="back()">Back</button><button class="btn-cta" onclick="saveContext()">Continue</button></div>`;
-  return {card, cta};
-}
-
-function stepPersonal(){
-  const checkSvg = `<svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>`;
-  const card = mk('card');
-  card.innerHTML = `
-    <div class="card-eyebrow">Step 4 of 5</div>
-    <div class="card-title">Your birth details</div>
-    <div class="card-sub">Almost there — just a few more details to complete your reading.</div>
-
-    <div class="affirm-banner">
-      ${AFFIRMATIONS.map(a=>`
-        <div class="affirm-item">
-          <div class="affirm-dot">${checkSvg}</div>
-          <span>${a.text}</span>
-        </div>`).join('')}
-    </div>
-
-    <div class="trust-row">
-      <div class="tpill">Encrypted &amp; private</div>
-      <div class="tpill">Only Panditji sees this</div>
-      <div class="tpill">Never shared</div>
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label class="field-label">Full Name <span class="req">*</span></label>
-        <input type="text" id="f-name" placeholder="Your name" value="${S.name}" autocomplete="name">
-      </div>
-      <div class="field">
-        <label class="field-label">Gender <span class="req">*</span></label>
-        <select id="f-gender">
-          <option value="">Select</option>
-          ${['Male','Female','Other','Prefer not to say'].map(g=>`<option ${S.gender===g?'selected':''} value="${g}">${g}</option>`).join('')}
-        </select>
-      </div>
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label class="field-label">Date of Birth <span class="req">*</span></label>
-        <input type="date" id="f-dob" value="${S.dob}">
-      </div>
-      <div class="field">
-        <label class="field-label">Time of Birth</label>
-        <input type="time" id="f-tob" value="${S.tob}">
-        <div class="field-hint">Leave blank if unknown</div>
-      </div>
-    </div>
-    <div class="field">
-      <label class="field-label">Place of Birth <span class="req">*</span></label>
-      <input type="text" id="f-pob" placeholder="City, State, Country" value="${S.pob}">
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label class="field-label">Email</label>
-        <input type="email" id="f-email" placeholder="For session notes" value="${S.email}" autocomplete="email">
-      </div>
-      <div class="field">
-        <label class="field-label">Consult via</label>
-        <select id="f-ctype">
-          <option value="">Select</option>
-          ${['Voice Call','Chat','Video Call'].map(t=>`<option ${S.consultType===t?'selected':''} value="${t}">${t}</option>`).join('')}
-        </select>
-      </div>
-    </div>`;
-
-  const cta = mk('div');
-  cta.innerHTML = `<div class="btn-row"><button class="btn-back" onclick="back()">Back</button><button class="btn-cta" id="cta" onclick="savePersonal()">Review</button></div>`;
-  return {card, cta};
-}
-
-function stepReview(){
-  const catNames = S.categories.map(id=>CATS.find(c=>c.id===id)?.name).filter(Boolean).join(', ');
-  const urgLabel = URGENCY.find(u=>u.v===S.urgency)?.label||'—';
-  const card = mk('card');
-  card.innerHTML = `
-    <div class="card-eyebrow">Step 5 of 5</div>
-    <div class="card-title">Review your submission</div>
-    <div class="card-sub">Panditji will see this right before your session begins.</div>
-    <div>
-      <div class="summ-row"><span class="sk">Areas</span><span class="sv">${catNames}</span></div>
-      ${S.subIssues.length?`<div class="summ-row"><span class="sk">Specifics</span><span class="sv">${S.subIssues.join(', ')}</span></div>`:''}
-      <div class="summ-row"><span class="sk">Urgency</span><span class="sv">${urgLabel}</span></div>
-      ${S.openText?`<div class="summ-row"><span class="sk">Note</span><span class="sv" style="font-style:italic;color:var(--muted)">"${S.openText.slice(0,100)}${S.openText.length>100?'…':''}"</span></div>`:''}
-      <div class="summ-row"><span class="sk">Name</span><span class="sv">${S.name} · ${S.gender}</span></div>
-      <div class="summ-row"><span class="sk">Birth</span><span class="sv">${S.dob}${S.tob?' · '+S.tob:''}<br>${S.pob}</span></div>
-      ${S.consultType?`<div class="summ-row"><span class="sk">Via</span><span class="sv">${S.consultType}</span></div>`:''}
-    </div>
-    <div class="notice green" style="margin-bottom:4px">
-      <div class="notice-mark">▲</div>
-      <div>By submitting you confirm these details are accurate and consent to Panditji reviewing them before your session.</div>
-    </div>`;
-
-  const cta = mk('div');
-  cta.innerHTML = `<div class="btn-row"><button class="btn-back" onclick="back()">Edit</button><button class="btn-cta" onclick="doSubmit()">Submit &amp; Connect</button></div>`;
-  return {card, cta};
-}
-
-function stepConfirmation(){
-  const first = S.name.split(' ')[0]||'there';
-  const card = mk('card confirm-center');
-  card.innerHTML = `
-    <div class="confirm-mark">
-      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-    </div>
-    <div class="confirm-title">You're all set, ${first}</div>
-    <div class="confirm-sub">Panditji will review your intake before the session begins. Connecting you now.</div>
-    <div class="ast-card">
-      <div class="ast-av">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="6.34" y1="6.34" x2="17.66" y2="17.66"/><line x1="17.66" y1="6.34" x2="6.34" y2="17.66"/></svg>
-      </div>
-      <div>
-        <div class="ast-name">Arun Pandit</div>
-        <div class="ast-meta">Vedic Astrology · Jyotish Visharad · 18 years</div>
-      </div>
-      <div class="ast-badge">Notes reviewed</div>
-    </div>
-    <ul class="prep-list">
-      <li>Your Concerns have been forwarded to Pandit Ji.</li>
-      <li>Be open and honest - the more clearly you share, the more accurate the guidance will be.</li>
-      <li>Find a quiet, private space for the call.</li>
-      <li>Prepare your top 2-3 questions beforehand.</li>
-    </ul>`;
-
-  const cta = mk('div');
-  cta.innerHTML = `<div class="btn-row"><button class="btn-cta" style="width:100%;flex:none" onclick="reset()">Start New Consultation</button></div>`;
-  return {card, cta};
-}
-
-// ── Actions ────────────────────────────────────────────────────────────────────
-function toggleCat(el,id){
-  if(S.categories.includes(id)){ S.categories=S.categories.filter(x=>x!==id); el.classList.remove('sel'); }
-  else { S.categories.push(id); el.classList.add('sel'); }
-}
-function toggleChip(el,s){
-  if(S.subIssues.includes(s)){ S.subIssues=S.subIssues.filter(x=>x!==s); el.classList.remove('sel'); }
-  else { S.subIssues.push(s); el.classList.add('sel'); }
-}
-function selectUrg(v,el){
-  S.urgency=v;
-  document.querySelectorAll('.urg-btn').forEach(b=>b.classList.remove('sel'));
-  el.classList.add('sel');
-}
-function saveConcern(){ if(!S.categories.length){ wiggle('cta'); return; } S.step=1; render(); }
-function saveDetails(){ if(!S.urgency){ wiggle('cta'); return; } S.step=2; render(); }
-function saveContext(){ S.openText=(document.getElementById('f-text')||{}).value?.trim()||''; S.step=3; render(); }
-function savePersonal(){
-  S.name=g('f-name'); S.dob=g('f-dob'); S.tob=g('f-tob');
-  S.pob=g('f-pob'); S.email=g('f-email');
-  S.gender=g('f-gender'); S.consultType=g('f-ctype');
-  if(!S.name||!S.dob||!S.pob||!S.gender){ wiggle('cta'); return; }
-  S.step=4; render();
-}
-function doSubmit(){ S.step=5; render(); }
-function back(){ if(S.step>0){ S.step--; render(); } }
-function reset(){
-  S={step:0,categories:[],subIssues:[],urgency:null,openText:'',name:'',dob:'',tob:'',pob:'',gender:'',email:'',consultType:''};
-  render();
-}
-
-// ── Helpers ────────────────────────────────────────────────────────────────────
-function mk(cls){ const e=document.createElement('div'); e.className=cls; return e; }
-function g(id){ const e=document.getElementById(id); return e?e.value.trim():''; }
-function wiggle(id){
-  const b=document.getElementById(id); if(!b) return;
-  b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
-  setTimeout(()=>b.classList.remove('shake'),350);
-}
-
-render();
+document.querySelectorAll('.feature-card, .step, .product-card, .cd-unit, .college-tile').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
 </script>
 </body>
 </html>
